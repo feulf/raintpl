@@ -1,27 +1,12 @@
 <?php
 
 /**
- * RainTPL easy template engine compiles HTML templates to PHP.
- *
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation;
- * either version 3 of the License, or any later version.
+ *  RainTPL easy template engine load HTML template.
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * 
- *  @author Federico Ulfo <rainelemental@gmail.com>
- *  @copyright 2006 - 2011 Federico Ulfo | www.federicoulfo.it
- *  @link http://www.raintpl.com
  *  @version 2.5
+ *  @author Federico Ulfo <rainelemental@gmail.com> | www.federicoulfo.it
+ *  @copyright RainTPL is under GNU/LGPL 3 License
+ *  @link http://www.raintpl.com
  *  @package RainFramework
  */
 
