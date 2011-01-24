@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8 />
+<title>{$title}</title>
+<!-- this link will be substituted with the right path : href="THEMES/acid/style.css" -->
+<link href="style.css" type="text/css" rel="stylesheet" >
+</head>
+<body>
+	<!-- this img src will be substituted with the right path : src="THEMES/acid/images.gif" -->			
+	<div id="logo"><a href="http://www.raintpl.com"><img src="img/logo.gif"></a></div>
+
+	<!-- content -->
+	<div id="content">
+	
+		<h1>Variable example</h1>
+		<div class="layout">
+
+			variable: {$variable}
+
+			<br/><br/>
+
+			variable assignment (number=10): {$number=10}  <br/>
+			and print (number): {$number}
+
+			<br/><br/>
+			
+			operation with strings (variable . number): {$variable . $number}
+
+			<br/><br/>
+			
+			maths operations (number+10): {$number + 10}
+
+			<br/><br/>
+			
+			a simple modifiers (variable|substr:0,7): {$variable|substr:0,7}
+			
+			<br/><br/>
+			
+			global variable (GLOBALS._SERVER.DOCUMENT_ROOT):  {$GLOBALS._SERVER.DOCUMENT_ROOT}
+		</div>
+
+		<h1>Constants</h1>
+		<div class="layout">
+			Constant: {#true#}
+		</div>
+		
+		<h1>Loop example</h1>
+		<div class="layout">
+			Simple loop example:
+
+			<ul>
+			{loop="week"}
+				<li>{$key} = {$value}</li>
+			{/loop}
+			</ul>
+
+			<br/><br/>
+			
+			Loop example with associative array:
+			<ul>
+				<li>ID _ Name _ Color</li>
+				{loop="user"}
+					<li class="color{$counter%2+1}">{$key}) - {$value.name} - {$value.color}</li>
+				{/loop}
+			</ul>
+			
+			<br/><br/>
+			
+			Loop an empty array
+			<ul>
+				{loop="empty_array"}
+					<li class="color{$counter%2+1}">{$key}) - {$value.name} - {$value.color}</li>
+				{else}
+					<b>The array is empty</b>
+				{/loop}
+			</ul>
+
+		</div>
+		
+		<h1>If Example</h1>
+		<div class="layout">
+		
+			simple if example:<br/>
+			{if condition="$number==10"}OK!
+			{else}NO!{/if}
+			
+			<br/><br/>
+			
+			example of if, elseif, else example:<br/>
+			{if="substr($variable,0,1)=='A'"}First character is A
+			{elseif="substr($variable,0,1)=='B')First character is B
+			{else}First character of variable is not A neither B
+			{/if}
+			
+			<br/><br/>
+			use of ? : operator (number==10?'OK!':'no')<br/>
+			{$number==10? 'OK!' : 'no'}
+			
+		</div>
+		
+		<h1>Include Example</h1>
+		<div class="layout">
+			Example of include file
+			{include="test"}
+		</div>
+		
+		<h1>Function Example</h1>
+		<div class="layout">
+			Example of function: substr('Hello World!',1,8)<br>
+			{function="substr('Hello World!',1,8)"}
+		</div>
+
+	</div>
+	
+	<div id="footer">{$copyright}</div>
+
+</body>
+</html>
