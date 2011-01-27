@@ -3,7 +3,7 @@
 /**
  *  RainTPL easy template engine load HTML template.
  * 
- *  @version 2.5
+ *  @version 2.5.1
  *  @author Federico Ulfo <rainelemental@gmail.com> | www.federicoulfo.it
  *  @copyright RainTPL is under GNU/LGPL 3 License
  *  @link http://www.raintpl.com
