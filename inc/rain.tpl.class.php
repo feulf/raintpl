@@ -104,6 +104,8 @@ class RainTPL{
 		if( $this->static_cache )
 			file_put_contents( $this->tpl['static_cache_filename'], "<?php if(!class_exists('raintpl')){exit;}?>" . $raintpl_contents );
 
+		unset( $this->tpl );
+			
 		// return or print the template
 		if( $return_string ) return $raintpl_contents; else echo $raintpl_contents;
 
