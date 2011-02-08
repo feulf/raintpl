@@ -5,7 +5,7 @@
 	error_reporting( E_ALL );
 	
 	//initialize a Rain TPL object
-	$tpl = new RainTPL();	
+	$tpl = new RainTPL;	
 
 	if( $cache = $tpl->cache('page') )
 		echo $cache;

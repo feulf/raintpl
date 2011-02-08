@@ -98,14 +98,11 @@ class RainTPL{
 		//----------------------
 		// load the template
 		//----------------------
-		
+
+		$rain_template_filename = TPL_EXT == 'php' ? $this->tpl['tpl_filename'] : $this->tpl['cache_filename'];
 		ob_start();
-
-		if( TPL_EXT == 'php' )
-			include $this->tpl['tpl_filename'];
-		else
-			include $this->tpl['cache_filename'];
-
+		extract( $this->var );
+		include $rain_template_filename;
 		$raintpl_contents = ob_get_contents();
 		ob_end_clean();
 		
@@ -157,7 +154,7 @@ class RainTPL{
 			}
 
 			// file doesn't exsist, or the template was updated, Rain will compile the template
-			if( RAINTPL_CHECK_TEMPLATE_UPDATE && TPL_EXT!='php' && ( !file_exists( $this->tpl['cache_filename'] || filemtime($this->tpl['cache_filename']) < filemtime($this->tpl['tpl_filename']) ) ) ){
+			if( RAINTPL_CHECK_TEMPLATE_UPDATE && TPL_EXT!='php' && ( !file_exists( $this->tpl['cache_filename'] ) || filemtime($this->tpl['cache_filename']) < filemtime($this->tpl['tpl_filename']) ) ){
 				$this->compileFile( $this->tpl['tpl_basedir'], $this->tpl['tpl_filename'], $this->tpl['cache_dir'], $this->tpl['cache_filename'] );
 				$this->tpl['tpl_has_changed'] = true;
 			}
@@ -266,7 +263,7 @@ class RainTPL{
 				// if the cache is active
 				if( isset($code[ 2 ]) )
 					//dynamic include
-					$compiled_code .= '<?php $tpl = new RainTPL();' .
+					$compiled_code .= '<?php $tpl = new RainTPL;' .
 								 'if( $cache = $tpl->cache( $cache_filename = basename("'.$include_var.'") ) )' .
 								 '	echo $cache;' .
 								 'else{ ' .
@@ -280,7 +277,7 @@ class RainTPL{
 								 '?>';
 				else
 					//dynamic include
-					$compiled_code .= '<?php $tpl = new RainTPL();' .
+					$compiled_code .= '<?php $tpl = new RainTPL;' .
 								 '$tpl_dir_temp = raintpl::$tpl_dir;' .
 								 '$tpl->assign( $this->var );' .
 								 'raintpl::$tpl_dir .= dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" );' .
@@ -516,9 +513,9 @@ class RainTPL{
 				elseif( $var_name == 'counter' )
 					$php_var = '$counter' . $loop_name;
 				else
-					$php_var = "\$this->var['" . $var_name . "']" . $variable_path;
+					$php_var = "\$" . $var_name . $variable_path;
 			}else
-				$php_var = "\$this->var['" . $var_name . "']" . $variable_path;
+				$php_var = "\$" . $var_name . $variable_path;
 
 			// compile the variable for php
 			if( isset( $function ) )

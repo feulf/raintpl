@@ -5,7 +5,7 @@
 	error_reporting( E_ALL );
 	
 	//initialize a Rain TPL object
-	$tpl = new RainTPL();
+	$tpl = new RainTPL;
 
 	//variable assign example
 	$variable = "Hello World!";
