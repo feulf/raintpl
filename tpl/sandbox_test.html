@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8 />
+
+<title>{$title}</title>
+<!-- this link will be substituted with the right path : href="THEMES/acid/style.css" -->
+<link href="style.css" type="text/css" rel="stylesheet" >
+</head>
+<body>
+	<!-- this img src will be substituted with the right path : src="THEMES/acid/images.gif" -->			
+	<div id="logo"><a href="http://www.raintpl.com"><img src="img/logo.gif"></a></div>
+
+	
+
+	
+	<!-- content -->
+	<div id="content">
+
+		in this template we'll try to execute malicious code:
+		
+		
+		
+		try to reset the sandbox variable: $black_list {$variable + raintpl::$black_list=null} . At first error raintpl will stop the compilation
+		
+		try to call exec {function="exec('dir')"} . So to see this error you must first fix the first error
+	
+		try to call $this {$this->draw()}
+
+		
+	</div>
+	
+	<div id="footer">{$copyright}</div>
+
+</body>
+</html>

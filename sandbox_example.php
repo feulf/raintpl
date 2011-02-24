@@ -34,7 +34,7 @@
 	$global_variable = "Hello world I'm global!";
 
 	//draw the template	
-	echo $tpl->draw( 'page', $return_string = true );
+	echo $tpl->draw( 'sandbox_test', $return_string = true );
 
 
 
