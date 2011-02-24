@@ -33,6 +33,9 @@
 	
 		$tpl->assign( $info );
 
+		global $global_variable;
+		$global_variable = "Hello world I'm global!";
+
 		//draw the template	
 		echo $tpl->draw( 'page', $return_string = true );
 }
