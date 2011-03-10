@@ -2,9 +2,12 @@
 
 	//include the RainTPL class
 	include "inc/rain.tpl.class.php";
-	error_reporting( E_ALL );
+
+	raintpl::configure("base_url", null );
+	raintpl::configure("tpl_dir", "tpl/" );
+	raintpl::configure("tmp_dir", "tmp/" );
 	
-	//initialize a Rain TPL object
+	//initialize a Rain TPL object	
 	$tpl = new RainTPL;
 
 	//variable assign example
@@ -31,11 +34,9 @@
 	$tpl->assign( $info );
 	
 	global $global_variable;
-	$global_variable = "Hello world I'm global!";
+	$global_variable = 'This is a global variable';
 
 	//draw the template	
 	echo $tpl->draw( 'page', $return_string = true );
-
-
 
 ?>

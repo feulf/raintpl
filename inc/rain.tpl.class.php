@@ -1,43 +1,15 @@
 <?php
 
 /**
- *  RainTPL easy template engine load HTML template.
+ *  RainTPL
+ *  -------
+ *	Realized by Federico Ulfo & maintained by the Rain Team
+ *	Distributed under GNU/LGPL 3 License
  * 
- *  @version 2.6.1 beta
- *  @author Federico Ulfo <rainelemental@gmail.com> | www.federicoulfo.it
- *  @copyright RainTPL is under GNU/LGPL 3 License
- *  @link http://www.raintpl.com
- *  @package RainFramework
+ *  @version 2.6.2
  */
 
 
-
-
-/**
- * Check template.
- * true: checks template update time, if changed it compile them
- * false: loads the compiled template. Set false if server doesn't have write permission for cache_directory.
- * 
- */
-define( "RAINTPL_CHECK_TEMPLATE_UPDATE", true );
-
-
-
-
-/**
- * Default cache expiration time (in seconds)
- * 
- */
-define( "RAINTPL_CACHE_EXPIRE_TIME", 3600 );
-
-
-
-
-
-/**
- * Load and draw templates
- *
- */
 class RainTPL{
 
 	// -------------------------
@@ -91,7 +63,7 @@ class RainTPL{
 		 *
 		 * @var array
 		 */
-		static $path_replace_list = array( 'a','img','link','script' ); 
+		static $path_replace_list = array( 'a', 'img', 'link', 'script' ); 
 
 
 		/**
@@ -99,7 +71,16 @@ class RainTPL{
 		 *
 		 * @var unknown_type
 		 */
-		static $black_list = array( '\$this', '_SESSION', '_SERVER', '_ENV', 'raintpl::', 'self::', 'eval', 'exec', 'unlink', 'rmdir' );
+		static $black_list = array( '\$this', 'raintpl::', 'self::', '_SESSION', '_SERVER', '_ENV',  'eval', 'exec', 'unlink', 'rmdir' );
+
+
+		/**
+		 * Check template.
+		 * true: checks template update time, if changed it compile them
+		 * false: loads the compiled template. Set false if server doesn't have write permission for cache_directory.
+		 * 
+		 */
+		static $check_template_update = true;
 
 	// -------------------------
 
@@ -121,9 +102,14 @@ class RainTPL{
 	// -------------------------
 
 
+
+	const CACHE_EXPIRE_TIME = 3600; // default cache expire time = hour
+
+
+
 	/**
 	 * Assign variable
-	 * eg. 	$t->assign('name','duck');
+	 * eg. 	$t->assign('name','yoda');
 	 *
 	 * @param mixed $variable_name Name of template variable or associative array name/value
 	 * @param mixed $value value assigned to this variable. Not set if variable_name is an associative array
@@ -150,6 +136,7 @@ class RainTPL{
 
 	function draw( $tpl_name, $return_string = false ){
 
+		// compile the template if necessary and set the template filepath
 		$this->check_template( $tpl_name );
 
 		//----------------------
@@ -185,6 +172,7 @@ class RainTPL{
 	
 
 
+	
 	/**
 	 * If exists a valid cache for this template it returns the cache
 	 *
@@ -193,7 +181,7 @@ class RainTPL{
 	 * @return string it return the HTML or null if the cache must be recreated
 	 */
 
-	function cache( $tpl_name, $expire_time = RAINTPL_CACHE_EXPIRE_TIME ){
+	function cache( $tpl_name, $expire_time = self::CACHE_EXPIRE_TIME ){
 
 		if( !$this->check_template( $tpl_name ) && file_exists( $this->tpl['static_cache_filename'] ) && ( time() - filemtime( $this->tpl['static_cache_filename'] ) < $expire_time ) )
 			return substr( file_get_contents( $this->tpl['static_cache_filename'] ), 43 );
@@ -206,7 +194,20 @@ class RainTPL{
 
 
 
-
+	/**
+	 * Configure the settings of RainTPL
+	 *
+	 */
+	static function configure( $setting, $value ){
+		if( is_array( $setting ) )
+			foreach( $setting as $key => $value )
+				$this->configure( $key, $value );	
+		else if( property_exists( "raintpl", $setting ) )
+			self::$$setting = $value;
+	}
+	
+	
+	
 	// check if has to compile the template
 	// return true if the template has changed
 	private function check_template( $tpl_name ){
@@ -223,13 +224,13 @@ class RainTPL{
 			$this->tpl['static_cache_filename'] = $temp_cache_filename . '.s.php';	// static cache filename			
 
 			// if the template doesn't exsist throw an error
-			if( RAINTPL_CHECK_TEMPLATE_UPDATE && !file_exists( $this->tpl['tpl_filename'] ) ){
+			if( self::$check_template_update && !file_exists( $this->tpl['tpl_filename'] ) ){
 				trigger_error( 'Template '.$tpl_basename.' not found!' );
 				return '<div style="background:#f8f8ff;border:1px solid #aaaaff;padding:10px;">Template <b>'.$tpl_basename.'</b> not found</div>';
 			}
 
 			// file doesn't exsist, or the template was updated, Rain will compile the template
-			if( RAINTPL_CHECK_TEMPLATE_UPDATE && ( !file_exists( $this->tpl['cache_filename'] ) || filemtime($this->tpl['cache_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
+			if( !file_exists( $this->tpl['cache_filename'] ) || ( self::$check_template_update && filemtime($this->tpl['cache_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
 				$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], $cache_dir, $this->tpl['cache_filename'] );
 				return true;
 			}
@@ -287,7 +288,22 @@ class RainTPL{
 	private function compileTemplate( $template_code, $tpl_basedir ){
 
 		//tag list
-		$tag_regexp = '/(\{loop(?: name){0,1}="\${0,1}(?:.*?)"\})|(\{\/loop\})|(\{if(?: condition){0,1}="(?:.*?)"\})|(\{elseif(?: condition){0,1}="(?:.*?)"\})|(\{else\})|(\{\/if\})|(\{function="(?:.*?)"\})|(\{noparse\})|(\{\/noparse\})|(\{ignore\})|(\{\/ignore\})|(\{include="(?:.*?)"(?: cache="(?:.*?)")?\})/';
+		$tag_regexp = array( 	'loop' 			=> '(\{loop(?: name){0,1}="\${0,1}(?:.*?)"\})',
+								'loop_close'	=> '(\{\/loop\})',
+								'if'			=> '(\{if(?: condition){0,1}="(?:.*?)"\})',
+								'elseif'		=> '(\{elseif(?: condition){0,1}="(?:.*?)"\})',
+								'else'			=> '(\{else\})',
+								'if_close'		=> '(\{\/if\})',
+								'function'		=> '(\{function="(?:.*?)"\})',
+								'noparse'		=> '(\{noparse\})',
+								'noparse_close' => '(\{\/noparse\})',
+								'ignore'		=> '(\{ignore\})',
+								'ignore_close'	=> '(\{\/ignore\})',
+								'include'		=> '(\{include="(?:.*?)"(?: cache="(?:.*?)")?\})',
+								'template_info'	=> '(\{\$template_info\})',
+							);
+		
+		$tag_regexp = "/" . join( "|", $tag_regexp ) . "/";
 
 		//split the code with the tags regexp
 		$template_code = preg_split ( $tag_regexp, $template_code, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
@@ -312,7 +328,7 @@ class RainTPL{
 	private function compileCode( $parsed_code ){
 
 		//variables initialization
-		$parent_loop[ $level = 0 ] = $loop_name = $loop_loopelse_open = $compiled_code = $compiled_return_code = $open_if = $comment_is_open = $ignore_is_open = null;
+		$parent_loop[ $level = 0 ] = $loop_name = $compiled_code = $open_if = $comment_is_open = $ignore_is_open = null;
 
 	 	//read all parsed code
 	 	while( $html = array_shift( $parsed_code ) ){
@@ -488,14 +504,28 @@ class RainTPL{
 				$compiled_code .=   "<?php echo {$function}{$parsed_param}; ?>";
 			}
 
+			// show all vars
+			elseif( preg_match( '/\{\$template_info\}/', $html, $code ) ){
+
+				//tag
+				$tag = $code[ 0 ];
+
+				//if code
+				$compiled_code .=   '<?php echo "<pre>"; print_r( $this->var ); echo "</pre>"; ?>';
+			}
+
+
 			//all html code
 			else{
-
+				
 				//variables substitution (es. {$title})
 				$compiled_code .= $this->html_var_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
 
 			}
 		}
+		
+		if( $open_if > 0 )
+			die( "Error! You need to close an {if} tag in <b>". $this->tpl['tpl_filename'] ." </b>template" );
 
 		return $compiled_code;
 	}
@@ -551,12 +581,10 @@ class RainTPL{
 	// replace var const and functions
 	function html_var_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_name = null, $echo = null ){
 
-
 		// const
-		$html = preg_replace( '/\{\#(\w+)\#\}/', $php_left_delimiter . ( $echo ? " echo " : null ) . '\\1' . $php_right_delimiter, $html );
+		$html = preg_replace( '/\{\#(\w+)\#{0,1}\}/', $php_left_delimiter . ( $echo ? " echo " : null ) . '\\1' . $php_right_delimiter, $html );
 
-		
-		preg_match_all( '/' . '\{\#{0,1}(\"{0,1}\w*\"{0,1})(\|.*?)\}' . '/', $html, $matches );
+		preg_match_all( '/' . '\{\#{0,1}(\"{0,1}.*?\"{0,1})(\|\w.*?)\#{0,1}\}' . '/', $html, $matches );
 		for( $i=0, $n=count($matches[0]); $i<$n; $i++ ){
 
 			//complete tag ex: {$news.title|substr:0,100}
@@ -565,7 +593,6 @@ class RainTPL{
 			//variable name ex: news.title
 			$var = $matches[ 1 ][ $i ];
 
-			
 			//function and parameters associate to the variable ex: substr:0,100
 			$extra_var = $matches[ 2 ][ $i ];
 			
