@@ -1,0 +1,1 @@
+RainTPL is an open source template engine for PHP that loads HTML template and pre-compile them in PHP to improve the speed.
