@@ -1,1 +1,0 @@
-<?php if(!class_exists('raintpl')){exit;}?><div class="output">This is test.html</div>
