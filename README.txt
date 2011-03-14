@@ -1,1 +1,4 @@
-RainTPL is an open source template engine for PHP that loads HTML template and pre-compile them in PHP to improve the speed.
+  RainTPL
+-------------
+
+The easy and fast template engine for PHP.   Rain.TPL makes application easier to create & enables designers/developers to work better together.
