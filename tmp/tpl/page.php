@@ -13,7 +13,7 @@
 	
 	<!-- content -->
 	<div id="content">
-
+	
 		<h2>Variable example</h2>
 		<div class="layout">
 
@@ -89,7 +89,7 @@
 				<li>ID _ Name _ Color</li>
 				<?php $counter1=-1; if( isset($user) && is_array($user) && sizeof($user) ) foreach( $user as $key1 => $value1 ){ $counter1++; ?>
 
-					<li class="color<?php echo $counter1%2+1;?>"><?php echo $key1;?>) - <?php echo $value1["name"];?> - <?php echo $value1["color"];?></li>
+					<li class="color<?php echo $counter1%2+1;?>"><?php echo $key1;?>) - <?php echo strtoupper( $value1["name"] );?> - <?php echo $value1["color"];?></li>
 				<?php } ?>
 
 			</ul>
@@ -147,10 +147,14 @@
 			<tt><?php $tpl = new RainTPL;$tpl_dir_temp = self::$tpl_dir;$tpl->assign( $this->var );self::$tpl_dir .= dirname("test") . ( substr("test",-1,1) != "/" ? "/" : "" );$tpl->draw( basename("test") );self::$tpl_dir = $tpl_dir_temp;?></tt>
 		</div>
 		
-		<h2>Function Example</h2>
+		<h2>Functions/Modifiers Example</h2>
 		<div class="layout">
 			<h3>Example of function: substr('Hello World!',1,8)</h3>
 			<tt><?php echo substr('Hello World!',1,8); ?></tt>
+			
+			<h3>Example of equivalent modifier</h3>
+			<tt><?php echo ( substr( "Hello World!", 1,8 ) );?></tt>
+
 		</div>
 		
 		<h2>Path Replace (WYSIWYG)</h2>

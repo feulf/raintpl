@@ -13,7 +13,7 @@
 	
 	<!-- content -->
 	<div id="content">
-
+	
 		<h2>Variable example</h2>
 		<div class="layout">
 
@@ -83,7 +83,7 @@
 			<ul>
 				<li>ID _ Name _ Color</li>
 				{loop="user"}
-					<li class="color{$counter%2+1}">{$key}) - {$value.name} - {$value.color}</li>
+					<li class="color{$counter%2+1}">{$key}) - {$value.name|strtoupper} - {$value.color}</li>
 				{/loop}
 			</ul>
 			</tt>
@@ -135,10 +135,14 @@
 			<tt>{include="test"}</tt>
 		</div>
 		
-		<h2>Function Example</h2>
+		<h2>Functions/Modifiers Example</h2>
 		<div class="layout">
 			<h3>Example of function: substr('Hello World!',1,8)</h3>
 			<tt>{function="substr('Hello World!',1,8)"}</tt>
+			
+			<h3>Example of equivalent modifier</h3>
+			<tt>{"Hello World!"|substr:1,8}</tt>
+
 		</div>
 		
 		<h2>Path Replace (WYSIWYG)</h2>

@@ -519,7 +519,12 @@ class RainTPL{
 			else{
 				
 				//variables substitution (es. {$title})
-				$compiled_code .= $this->html_var_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
+				$html = $this->var_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
+				//const substitution (es. {#CONST#})
+				$html = $this->const_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
+				//functions substitution (es. {"string"|functions})
+				$compiled_code .= $this->func_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
+
 
 			}
 		}
@@ -577,9 +582,16 @@ class RainTPL{
 
 
 
+	// replace const
+	function const_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_name = null, $echo = null ){
+		// const
+		return preg_replace( '/\{\#(\w+)\#{0,1}\}/', $php_left_delimiter . ( $echo ? " echo " : null ) . '\\1' . $php_right_delimiter, $html );
+	}
+
 	
+
 	// replace var const and functions
-	function html_var_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_name = null, $echo = null ){
+	function func_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_name = null, $echo = null ){
 
 		// const
 		$html = preg_replace( '/\{\#(\w+)\#{0,1}\}/', $php_left_delimiter . ( $echo ? " echo " : null ) . '\\1' . $php_right_delimiter, $html );
@@ -658,7 +670,6 @@ class RainTPL{
 
 		}
 		
-		$html = $this->var_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter, $php_right_delimiter, $loop_name, $echo );
 		return $html;
 
 	}
