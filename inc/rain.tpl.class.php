@@ -201,7 +201,7 @@ class RainTPL{
 	static function configure( $setting, $value ){
 		if( is_array( $setting ) )
 			foreach( $setting as $key => $value )
-				$this->configure( $key, $value );	
+				self::configure( $key, $value );
 		else if( property_exists( "raintpl", $setting ) )
 			self::$$setting = $value;
 	}
