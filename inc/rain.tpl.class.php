@@ -641,14 +641,29 @@ class RainTPL{
 			//if there's a function
 			if( $function_var ){
 				
-				//split function by function_name and parameters (ex substr:0,100)
-				$function_split = explode( ':', $function_var, 2 );
-				
-				//function name
-				$function = $function_split[ 0 ];
-				
-				//function parameters
-				$params = ( isset( $function_split[ 1 ] ) ) ? $function_split[ 1 ] : null;
+                                // check if there's a function or a static method and separate, function by parameters
+				$function_var = str_replace("::", "@double_dot@", $function_var );
+
+                                // get the position of the first :
+                                if( $dot_position = strpos( $function_var, ":" ) ){
+
+                                    // get the function and the parameters
+                                    $function = substr( $function_var, 0, $dot_position );
+                                    $params = substr( $function_var, $dot_position+1 );
+
+                                }
+                                else{
+
+                                    //get the function
+                                    $function = str_replace( "@double_dot@", "::", $function_var );
+                                    $params = null;
+
+                                }
+
+                                // replace back the @double_dot@ with ::
+                                $function = str_replace( "@double_dot@", "::", $function );
+                                $params = str_replace( "@double_dot@", "::", $params );
+
 
 			}
 			else
