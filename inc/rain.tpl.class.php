@@ -6,7 +6,7 @@
  *	Realized by Federico Ulfo & maintained by the Rain Team
  *	Distributed under GNU/LGPL 3 License
  * 
- *  @version 2.6.2
+ *  @version 2.6.3
  */
 
 
@@ -63,7 +63,7 @@ class RainTPL{
 		 *
 		 * @var array
 		 */
-		static $path_replace_list = array( 'a', 'img', 'link', 'script' ); 
+		static $path_replace_list = array( 'a', 'img', 'link', 'script', 'input' );
 
 
 		/**
@@ -580,6 +580,11 @@ class RainTPL{
 			if( in_array( "a", self::$path_replace_list ) ){
 				$exp = array_merge( $exp , array( '/<a(.*?)href=(?:")http\:\/\/([^"]+?)(?:")/i', '/<a(.*?)href="(.*?)"/' ) );
 				$sub = array_merge( $sub , array( '<a$1href=@http://$2@',  '<a$1href="' . self::$base_url . '$2"' ) );
+			}
+
+			if( in_array( "input", self::$path_replace_list ) ){
+				$exp = array_merge( $exp , array( '/<input(.*?)src=(?:")http\:\/\/([^"]+?)(?:")/i', '/<input(.*?)src=(?:")([^"]+?)#(?:")/i', '/<input(.*?)src="(.*?)"/', '/<input(.*?)src=(?:\@)([^"]+?)(?:\@)/i' ) );
+				$sub = array_merge( $sub , array( '<input$1src=@http://$2@', '<input$1src=@$2@', '<input$1src="' . self::$base_url . self::$tpl_dir . $tpl_basedir . '$2"', '<input$1src="$2"' ) );
 			}
 
 			return preg_replace( $exp, $sub, $html );
