@@ -139,34 +139,44 @@ class RainTPL{
 		// compile the template if necessary and set the template filepath
 		$this->check_template( $tpl_name );
 
-		//----------------------
-		// load the template
-		//----------------------
 
+		// Cache is off and, return_string is false
+                // Rain just echo the template
+
+                if( !$this->static_cache && !$return_string ){
+                        extract( $this->var );
+            		include $this->tpl['cache_filename'];
+                        unset( $this->tpl );
+                }
+
+
+		// cache or return_string are enabled
+                // rain get the output buffer to save the output in the cache or to return it as string
+
+                else{
+
+                        //----------------------
+                        // get the output buffer
+                        //----------------------
 			ob_start();
 			extract( $this->var );
 			include $this->tpl['cache_filename'];
 			$raintpl_contents = ob_get_contents();
 			ob_end_clean();
-		
-		//----------------------
+                        //----------------------
 
 
-		//----------------------
-		// save the static cache
-		//----------------------
-
+                        // save the output in the cache
 			if( $this->static_cache )
 				file_put_contents( $this->tpl['static_cache_filename'], "<?php if(!class_exists('raintpl')){exit;}?>" . $raintpl_contents );
-		
-		//----------------------
-		
 
-		// free memory
-		unset( $this->tpl );
+                        // free memory
+                        unset( $this->tpl );
 
-		// return or print the template
-		if( $return_string ) return $raintpl_contents; else echo $raintpl_contents;
+                        // return or print the template
+                        if( $return_string ) return $raintpl_contents; else echo $raintpl_contents;
+
+                }
 
 	}
 	
