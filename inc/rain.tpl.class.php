@@ -6,7 +6,7 @@
  *	Realized by Federico Ulfo & maintained by the Rain Team
  *	Distributed under GNU/LGPL 3 License
  *
- *  @version 2.6.2
+ *  @version 2.6.4
  */
 
 
@@ -264,13 +264,13 @@ class RainTPL{
 		$this->tpl['source'] = $template_code = file_get_contents( $tpl_filename );
 
 		//xml substitution
-		$template_code = preg_replace( "/\<\?xml(.*?)\?\>/", "##XML\\1XML##", $template_code );
+		$template_code = preg_replace( "/\<\?xml(.*?)\?\>/s", "##XML\\1XML##", $template_code );
 
 		//disable php tag
-		$template_code = preg_replace( array("/\<\?/","/\?\>/"), array("&lt;?","?&gt;"), $template_code );
+		$template_code = str_replace( array("<?","?>"), array("&lt;?","?&gt;"), $template_code );
 
 		//xml re-substitution
-		$template_code = preg_replace( "/\#\#XML(.*?)XML\#\#/", "<?php echo '<?xml' . stripslashes('\\1') . '?>'; ?>", $template_code );
+		$template_code = preg_replace( "/##XML(.*?)XML##/se", "<?php echo '<?xml' . stripslashes('\\1') . '?>'; ?>", $template_code );
 
 		//compile template
 		$template_compiled = "<?php if(!class_exists('raintpl')){exit;}?>" . $this->compileTemplate( $template_code, $tpl_basedir );
@@ -299,19 +299,19 @@ class RainTPL{
 
 		//tag list
 		$tag_regexp = array( 	'loop' 			=> '(\{loop(?: name){0,1}="\${0,1}(?:.*?)"\})',
-								'loop_close'	=> '(\{\/loop\})',
-								'if'			=> '(\{if(?: condition){0,1}="(?:.*?)"\})',
-								'elseif'		=> '(\{elseif(?: condition){0,1}="(?:.*?)"\})',
-								'else'			=> '(\{else\})',
-								'if_close'		=> '(\{\/if\})',
-								'function'		=> '(\{function="(?:.*?)"\})',
-								'noparse'		=> '(\{noparse\})',
-								'noparse_close' => '(\{\/noparse\})',
-								'ignore'		=> '(\{ignore\})',
-								'ignore_close'	=> '(\{\/ignore\})',
-								'include'		=> '(\{include="(?:.*?)"(?: cache="(?:.*?)")?\})',
-								'template_info'	=> '(\{\$template_info\})',
-							);
+                                        'loop_close'	=> '(\{\/loop\})',
+                                        'if'		=> '(\{if(?: condition){0,1}="(?:.*?)"\})',
+                                        'elseif'		=> '(\{elseif(?: condition){0,1}="(?:.*?)"\})',
+                                        'else'		=> '(\{else\})',
+                                        'if_close'		=> '(\{\/if\})',
+                                        'function'		=> '(\{function="(?:.*?)"\})',
+                                        'noparse'		=> '(\{noparse\})',
+                                        'noparse_close'     => '(\{\/noparse\})',
+                                        'ignore'		=> '(\{ignore\})',
+                                        'ignore_close'	=> '(\{\/ignore\})',
+                                        'include'		=> '(\{include="(?:.*?)"(?: cache="(?:.*?)")?\})',
+                                        'template_info'	=> '(\{\$template_info\})',
+                                    );
 
 		$tag_regexp = "/" . join( "|", $tag_regexp ) . "/";
 
@@ -338,7 +338,9 @@ class RainTPL{
 	private function compileCode( $parsed_code ){
 
 		//variables initialization
-		$parent_loop[ $level = 0 ] = $loop_name = $compiled_code = $open_if = $comment_is_open = $ignore_is_open = null;
+		$compiled_code = $open_if = $comment_is_open = $ignore_is_open = null;
+                $loop_level = 0;
+
 
 	 	//read all parsed code
 	 	while( $html = array_shift( $parsed_code ) ){
@@ -372,7 +374,7 @@ class RainTPL{
 			elseif( preg_match( '/(?:\{include="(.*?)"(?: cache="(.*?)"){0,1}\})/', $html, $code ) ){
 
 				//variables substitution
-				$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $this_loop_name = $parent_loop[ $level ] );
+				$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
 
 				// if the cache is active
 				if( isset($code[ 2 ]) )
@@ -384,7 +386,7 @@ class RainTPL{
 								 '$tpl_dir_temp = self::$tpl_dir;' .
 								 '$tpl->assign( $this->var );' .
 								 'self::$tpl_dir .= dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" );' .
-								 ( !$this_loop_name ? null : '$tpl->assign( "key", $key'.$this_loop_name.' ); $tpl->assign( "value", $value'.$this_loop_name.' );' ).
+								 ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
 								 '$tpl->draw( $cache_filename );'.
 								 'self::$tpl_dir = $tpl_dir_temp;' .
 								 '}' .
@@ -395,7 +397,7 @@ class RainTPL{
 								 '$tpl_dir_temp = self::$tpl_dir;' .
 								 '$tpl->assign( $this->var );' .
 								 'self::$tpl_dir .= dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" );' .
-								 ( !$this_loop_name ? null : '$tpl->assign( "key", $key'.$this_loop_name.' ); $tpl->assign( "value", $value'.$this_loop_name.' );' ).
+								 ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
 								 '$tpl->draw( basename("'.$include_var.'") );'.
 								 'self::$tpl_dir = $tpl_dir_temp;' .
 								 '?>';
@@ -406,18 +408,15 @@ class RainTPL{
 	 		elseif( preg_match( '/\{loop(?: name){0,1}="\${0,1}(.*?)"\}/', $html, $code ) ){
 
 	 			//increase the loop counter
-	 			$level++;
-
-	 			//name of this loop
-				$parent_loop[ $level ] = $level;
+	 			$loop_level++;
 
 				//replace the variable in the loop
-				$var = $this->var_replace( '$' . $code[ 1 ], $tag_left_delimiter=null, $tag_right_delimiter=null, $php_left_delimiter=null, $php_right_delimiter=null, $level-1 );
+				$var = $this->var_replace( '$' . $code[ 1 ], $tag_left_delimiter=null, $tag_right_delimiter=null, $php_left_delimiter=null, $php_right_delimiter=null, $loop_level-1 );
 
 				//loop variables
-				$counter = "\$counter$level";	// count iteration
-				$key = "\$key$level";			// key
-				$value = "\$value$level";		// value
+				$counter = "\$counter$loop_level";       // count iteration
+				$key = "\$key$loop_level";               // key
+				$value = "\$value$loop_level";           // value
 
 				//loop code
 				$compiled_code .=  "<?php $counter=-1; if( isset($var) && is_array($var) && sizeof($var) ) foreach( $var as $key => $value ){ $counter++; ?>";
@@ -428,10 +427,10 @@ class RainTPL{
 			elseif( preg_match( '/\{\/loop\}/', $html ) ){
 
 				//iterator
-				$counter = "\$counter$level";
+				$counter = "\$counter$loop_level";
 
 				//decrease the loop counter
-				$level--;
+				$loop_level--;
 
 				//close loop code
 				$compiled_code .=  "<?php } ?>";
@@ -454,10 +453,11 @@ class RainTPL{
 				$this->function_check( $tag );
 
 				//variable substitution into condition (no delimiter into the condition)
-				$parsed_condition = $this->var_replace( $condition, $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $parent_loop[ $level ] );
+				$parsed_condition = $this->var_replace( $condition, $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level );
 
 				//if code
 				$compiled_code .=   "<?php if( $parsed_condition ){ ?>";
+
 			}
 
 			//elseif
@@ -470,7 +470,7 @@ class RainTPL{
 				$condition = $code[ 1 ];
 
 				//variable substitution into condition (no delimiter into the condition)
-				$parsed_condition = $this->var_replace( $condition, $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $parent_loop[ $level ] );
+				$parsed_condition = $this->var_replace( $condition, $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level );
 
 				//elseif code
 				$compiled_code .=   "<?php }elseif( $parsed_condition ){ ?>";
@@ -508,7 +508,7 @@ class RainTPL{
 				$this->function_check( $tag );
 
 				//parse the parameters
-				$parsed_param = isset( $code[2] ) ? $this->var_replace( $code[2], $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $parent_loop[ $level ] ) : '()';
+				$parsed_param = isset( $code[2] ) ? $this->var_replace( $code[2], $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level ) : '()';
 
 				//if code
 				$compiled_code .=   "<?php echo {$function}{$parsed_param}; ?>";
@@ -529,12 +529,11 @@ class RainTPL{
 			else{
 
 				//variables substitution (es. {$title})
-				$html = $this->var_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
+				$html = $this->var_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $loop_level, $echo = true );
 				//const substitution (es. {#CONST#})
-				$html = $this->const_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
+				$html = $this->const_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $loop_level, $echo = true );
 				//functions substitution (es. {"string"|functions})
-				$compiled_code .= $this->func_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $parent_loop[ $level ], $echo = true );
-
+				$compiled_code .= $this->func_replace( $html, $left_delimiter = '\{', $right_delimiter = '\}', $php_left_delimiter = '<?php ', $php_right_delimiter = ';?>', $loop_level, $echo = true );
 			}
 		}
 
@@ -598,17 +597,18 @@ class RainTPL{
 
 
 	// replace const
-	function const_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_name = null, $echo = null ){
+	function const_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level = null, $echo = null ){
 		// const
 		return preg_replace( '/\{\#(\w+)\#{0,1}\}/', $php_left_delimiter . ( $echo ? " echo " : null ) . '\\1' . $php_right_delimiter, $html );
 	}
 
 
 
-	// replace functions/modifiers
-	function func_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_name = null, $echo = null ){
+	// replace functions/modifiers on constants and strings
+	function func_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level = null, $echo = null ){
 
 		preg_match_all( '/' . '\{\#{0,1}(\"{0,1}.*?\"{0,1})(\|\w.*?)\#{0,1}\}' . '/', $html, $matches );
+
 		for( $i=0, $n=count($matches[0]); $i<$n; $i++ ){
 
 			//complete tag ex: {$news.title|substr:0,100}
@@ -623,7 +623,7 @@ class RainTPL{
 			// check if there's any function disabled by black_list
 			$this->function_check( $tag );
 
-			$extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_name );
+			$extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_level );
 
 			// check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
 			$is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
@@ -704,90 +704,93 @@ class RainTPL{
 
 
 
-	function var_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_name = null, $echo = null ){
+	function var_replace( $html, $tag_left_delimiter, $tag_right_delimiter, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level = null, $echo = null ){
 
 		//all variables
-		preg_match_all( '/' . $tag_left_delimiter . '\$(\w+(?:\.\${0,1}(?:\w+))*(?:\[\${0,1}(?:\w+)\])*(?:\-\>\${0,1}(?:\w+))*)(.*?)' . $tag_right_delimiter . '/', $html, $matches );
-		for( $i=0, $n=count($matches[0]); $i<$n; $i++ ){
+		if( preg_match_all( '/' . $tag_left_delimiter . '\$(\w+(?:\.\${0,1}[A-Za-z0-9_]+)*(?:(?:\[\${0,1}[A-Za-z0-9_]+\])|(?:\-\>\${0,1}[A-Za-z0-9_]+))*)(.*?)' . $tag_right_delimiter . '/', $html, $matches ) ){
 
-			//complete tag ex: {$news.title|substr:0,100}
-			$tag = $matches[ 0 ][ $i ];
+                    for( $parsed=array(), $i=0, $n=count($matches[0]); $i<$n; $i++ )
+                        $parsed[$matches[0][$i]] = array('var'=>$matches[1][$i],'extra_var'=>$matches[2][$i]);
 
-			//variable name ex: news.title
-			$var = $matches[ 1 ][ $i ];
+                    foreach( $parsed as $tag => $array ){
 
-			//function and parameters associate to the variable ex: substr:0,100
-			$extra_var = $matches[ 2 ][ $i ];
+                            //variable name ex: news.title
+                            $var = $array['var'];
 
-			// check if there's any function disabled by black_list
-			$this->function_check( $tag );
+                            //function and parameters associate to the variable ex: substr:0,100
+                            $extra_var = $array['extra_var'];
 
-			$extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_name );
+                            // check if there's any function disabled by black_list
+                            $this->function_check( $tag );
 
-			// check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
-			$is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
+                            $extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_level );
 
-			//function associate to variable
-			$function_var = ( $extra_var and $extra_var[0] == '|') ? substr( $extra_var, 1 ) : null;
+                            // check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
+                            $is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
 
-			//variable path split array (ex. $news.title o $news[title]) or object (ex. $news->title)
-			$temp = preg_split( "/\.|\[|\-\>/", $var );
+                            //function associate to variable
+                            $function_var = ( $extra_var and $extra_var[0] == '|') ? substr( $extra_var, 1 ) : null;
 
-			//variable name
-			$var_name = $temp[ 0 ];
+                            //variable path split array (ex. $news.title o $news[title]) or object (ex. $news->title)
+                            $temp = preg_split( "/\.|\[|\-\>/", $var );
 
-			//variable path
-			$variable_path = substr( $var, strlen( $var_name ) );
+                            //variable name
+                            $var_name = $temp[ 0 ];
 
-			//parentesis transform [ e ] in [" e in "]
-			$variable_path = str_replace( '[', '["', $variable_path );
-			$variable_path = str_replace( ']', '"]', $variable_path );
+                            //variable path
+                            $variable_path = substr( $var, strlen( $var_name ) );
 
-			//transform .$variable in ["$variable"]
-			$variable_path = preg_replace('/\.\$(\w+)/', '["$\\1"]', $variable_path );
+                            //parentesis transform [ e ] in [" e in "]
+                            $variable_path = str_replace( '[', '["', $variable_path );
+                            $variable_path = str_replace( ']', '"]', $variable_path );
 
-			//transform [variable] in ["variable"]
-			$variable_path = preg_replace('/\.(\w+)/', '["\\1"]', $variable_path );
+                            //transform .$variable in ["$variable"]
+                            $variable_path = preg_replace('/\.\$(\w+)/', '["$\\1"]', $variable_path );
 
-			//if there's a function
-			if( $function_var ){
+                            //transform [variable] in ["variable"]
+                            $variable_path = preg_replace('/\.(\w+)/', '["\\1"]', $variable_path );
 
-				//split function by function_name and parameters (ex substr:0,100)
-				$function_split = explode( ':', $function_var, 2 );
+                            //if there's a function
+                            if( $function_var ){
 
-				//function name
-				$function = $function_split[ 0 ];
+                                    //split function by function_name and parameters (ex substr:0,100)
+                                    $function_split = explode( ':', $function_var, 2 );
 
-				//function parameters
-				$params = ( isset( $function_split[ 1 ] ) ) ? $function_split[ 1 ] : null;
+                                    //function name
+                                    $function = $function_split[ 0 ];
 
-			}
-			else
-				$function = $params = null;
+                                    //function parameters
+                                    $params = ( isset( $function_split[ 1 ] ) ) ? $function_split[ 1 ] : null;
 
-			//if it is inside a loop
-			if( $loop_name ){
-				//verify the variable name
-				if( $var_name == 'key' )
-					$php_var = '$key' . $loop_name;
-				elseif( $var_name == 'value' )
-					$php_var = '$value' . $loop_name . $variable_path;
-				elseif( $var_name == 'counter' )
-					$php_var = '$counter' . $loop_name;
-				else
-					$php_var = "\$" . $var_name . $variable_path;
-			}else
-				$php_var = "\$" . $var_name . $variable_path;
+                            }
+                            else
+                                    $function = $params = null;
 
-			// compile the variable for php
-			if( isset( $function ) )
-				$php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . ( $params ? "( $function( $php_var, $params ) )" : "$function( $php_var )" ) . $php_right_delimiter;
-			else
-				$php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . $php_var . $extra_var . $php_right_delimiter;
+                            //if it is inside a loop
+                            if( $loop_level ){
+                                    //verify the variable name
+                                    if( $var_name == 'key' )
+                                            $php_var = '$key' . $loop_level;
+                                    elseif( $var_name == 'value' )
+                                            $php_var = '$value' . $loop_level . $variable_path;
+                                    elseif( $var_name == 'counter' )
+                                            $php_var = '$counter' . $loop_level;
+                                    else
+                                            $php_var = "\$" . $var_name . $variable_path;
+                            }else
+                                    $php_var = "\$" . $var_name . $variable_path;
 
-			$html = str_replace( $tag, $php_var, $html );
+                            // compile the variable for php
+                            if( isset( $function ) )
+                                    $php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . ( $params ? "( $function( $php_var, $params ) )" : "$function( $php_var )" ) . $php_right_delimiter;
+                            else
+                                    $php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . $php_var . $extra_var . $php_right_delimiter;
 
-		}
+                            $html = str_replace( $tag, $php_var, $html );
+
+
+                    }
+                }
 
 		return $html;
 	}
