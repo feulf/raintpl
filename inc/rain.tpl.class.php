@@ -195,7 +195,7 @@ class RainTPL{
 	function cache( $tpl_name, $expire_time = self::CACHE_EXPIRE_TIME, $cache_id = null ){
 
                 // set the cache_id
-                $this->tpl['cache_id'] = $cache_id;
+                $this->cache_id = $cache_id;
 
 		if( !$this->check_template( $tpl_name ) && file_exists( $this->tpl['cache_filename'] ) && ( time() - filemtime( $this->tpl['cache_filename'] ) < $expire_time ) )
 			return substr( file_get_contents( $this->tpl['cache_filename'] ), 43 );
@@ -236,7 +236,7 @@ class RainTPL{
 			$cache_dir                          = self::$cache_dir . $tpl_dir;	// cache directory
 			$temp_compiled_filename             = $cache_dir . $tpl_basename;
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.php';	// cache filename
-			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->tpl['cache_id'] . '.php';	// static cache filename
+			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.php';	// static cache filename
 
 			// if the template doesn't exsist throw an error
 			if( self::$check_template_update && !file_exists( $this->tpl['tpl_filename'] ) ){
