@@ -10,7 +10,7 @@
 	//initialize a Rain TPL object	
 	$tpl = new RainTPL;
 
-	if( $cache = $tpl->cache('page') )
+	if( $cache = $tpl->cache('page', 60, 1) )
 		echo $cache;
 	else{
 

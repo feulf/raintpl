@@ -213,11 +213,11 @@ class RainTPL{
 	 * Configure the settings of RainTPL
 	 *
 	 */
-	static function configure( $setting, $value ){
+	static function configure( $setting, $value = null ){
 		if( is_array( $setting ) )
 			foreach( $setting as $key => $value )
 				self::configure( $key, $value );
-		else if( property_exists( "raintpl", $setting ) )
+		else if( property_exists( __CLASS__, $setting ) )
 			self::$$setting = $value;
 	}
 
