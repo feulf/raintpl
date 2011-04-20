@@ -275,7 +275,7 @@ class RainTPL{
 		$template_code = str_replace( array("<?","?>"), array("&lt;?","?&gt;"), $template_code );
 
 		//xml re-substitution
-		$template_code = preg_replace( "/##XML(.*?)XML##/se", "<?php echo '<?xml' . stripslashes('\\1') . '?>'; ?>", $template_code );
+                $template_code = preg_replace( "/##XML(.*?)XML##/se", "'<?php echo \'<?xml ' . stripslashes('\\1') . '?>\'; ?>'", $template_code );
 
 		//compile template
 		$template_compiled = "<?php if(!class_exists('raintpl')){exit;}?>" . $this->compileTemplate( $template_code, $tpl_basedir );
