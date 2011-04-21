@@ -810,25 +810,25 @@ class RainTPL{
 	 */
 	private function function_check( $code ){
 
-		$preg = '#(\W|\s)' . implode( '(\W|\s)|(\W|\s)', self::$black_list ) . '(\W|\s)#';
+		if( count(self::$black_list) ) {
+			foreach ( self::$black_list as $banned_value ) {
+				// if the banned function or value is found in $code
+				if ( strpos( $code, $banned_value ) !== FALSE ) {
+					// find the line of the error
+					$rows = explode( "\n", $this->tpl['source'] );
+					foreach ( $rows as $line => $row ) {
+						if ( strpos($row, $code ) !== FALSE ) {
+							// draw the error line
+							$error = str_replace( array('<','>'), array( '&lt;','&gt;' ), array($code, $row) );
+							$error = str_replace( $code, '<span style="color: red">'.$code.'</span>', $row );
 
-		// check if the function is in the black list (or not in white list)
-		if( count(self::$black_list) && preg_match( $preg, $code, $match ) ){
-
-			// find the line of the error
-			$line = 0;
-			$rows=explode("\n",$this->tpl['source']);
-			while( !strpos($rows[$line],$code) )
-				$line++;
-
-			// draw the error line
-			$error = str_replace( array('<','>'), array( '&lt;','&gt;' ), array($code,$rows[$line]) );
-			$error = str_replace( $code, "<font color=red>$code</font>", $rows[$line] );
-
-			// debug the error and stop the execution of the script
-			die( "<div>RainTPL Sandbox Error in template <b>{$this->tpl['tpl_filename']}</b> at line $line : <i>$error</i></b>" );
+							// debug the error and stop the execution of the script
+							die( "<div>RainTPL Sandbox Error in template <b>{$this->tpl['tpl_filename']}</b> at line $line : <i>$error</i> is blacklisted.</b>" );
+						}
+					}
+				}
+			}
 		}
-
 	}
 
 }
