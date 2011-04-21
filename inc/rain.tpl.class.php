@@ -254,7 +254,13 @@ class RainTPL{
 	}
 
 
-
+	/**
+	* execute stripslaches() on the xml block. Invoqued by preg_replace_callback function below
+	* @access private
+	*/
+	private function xml_reSubstitution($capture) {
+    		return "<?php echo '<?xml ".stripslashes($capture[1])." ?>'; ?>";
+	} 
 
 	/**
 	 * Compile and write the compiled template file
@@ -269,16 +275,17 @@ class RainTPL{
 		$this->tpl['source'] = $template_code = file_get_contents( $tpl_filename );
 
 		//xml substitution
-		$template_code = preg_replace( "/\<\?xml(.*?)\?\>/s", "##XML\\1XML##", $template_code );
+		$template_code = preg_replace( "/<\?xml(.*?)\?>/s", "##XML\\1XML##", $template_code );
 
 		//disable php tag
 		$template_code = str_replace( array("<?","?>"), array("&lt;?","?&gt;"), $template_code );
 
 		//xml re-substitution
-                $template_code = preg_replace( "/##XML(.*?)XML##/se", "'<?php echo \'<?xml ' . stripslashes('\\1') . '?>\'; ?>'", $template_code );
+		$template_code = preg_replace_callback ( "/##XML(.*?)XML##/s", array($this, 'xml_reSubstitution'), $template_code ); 
 
 		//compile template
 		$template_compiled = "<?php if(!class_exists('raintpl')){exit;}?>" . $this->compileTemplate( $template_code, $tpl_basedir );
+		
 
 		// fix the php-eating-newline-after-closing-tag-problem
 		$template_compiled = str_replace( "?>\n", "?>\n\n", $template_compiled );
@@ -303,20 +310,20 @@ class RainTPL{
 	private function compileTemplate( $template_code, $tpl_basedir ){
 
 		//tag list
-		$tag_regexp = array( 	'loop' 			=> '(\{loop(?: name){0,1}="\${0,1}(?:.*?)"\})',
-                                        'loop_close'	=> '(\{\/loop\})',
-                                        'if'		=> '(\{if(?: condition){0,1}="(?:.*?)"\})',
-                                        'elseif'		=> '(\{elseif(?: condition){0,1}="(?:.*?)"\})',
-                                        'else'		=> '(\{else\})',
-                                        'if_close'		=> '(\{\/if\})',
-                                        'function'		=> '(\{function="(?:.*?)"\})',
-                                        'noparse'		=> '(\{noparse\})',
-                                        'noparse_close'     => '(\{\/noparse\})',
-                                        'ignore'		=> '(\{ignore\})',
-                                        'ignore_close'	=> '(\{\/ignore\})',
-                                        'include'		=> '(\{include="(?:.*?)"(?: cache="(?:.*?)")?\})',
-                                        'template_info'	=> '(\{\$template_info\})',
-                                    );
+		$tag_regexp = array( 	'loop'	 	=> '(\{loop(?: name){0,1}="\${0,1}[^"]*"\})',
+					'loop_close'	=> '(\{\/loop\})',
+					'if'		=> '(\{if(?: condition){0,1}="[^"]*"\})',
+					'elseif'	=> '(\{elseif(?: condition){0,1}="[^"]*"\})',
+					'else'		=> '(\{else\})',
+					'if_close'	=> '(\{\/if\})',
+					'function'	=> '(\{function="[^"]*"\})',
+					'noparse'	=> '(\{noparse\})',
+					'noparse_close' => '(\{\/noparse\})',
+					'ignore'	=> '(\{ignore\})',
+					'ignore_close'	=> '(\{\/ignore\})',
+					'include'	=> '(\{include="[^"]*"(?: cache="[^"]*")?\})',
+					'template_info'	=> '(\{\$template_info\})',
+							);
 
 		$tag_regexp = "/" . join( "|", $tag_regexp ) . "/";
 
@@ -351,7 +358,7 @@ class RainTPL{
 	 	while( $html = array_shift( $parsed_code ) ){
 
 	 		//close ignore tag
-	 		if( !$comment_is_open && preg_match( '/\{\/ignore\}/', $html ) )
+			if( !$comment_is_open && strpos( $html, '{/ignore}' ) !== FALSE )
 	 			$ignore_is_open = false;
 
 	 		//code between tag ignore id deleted
@@ -360,7 +367,7 @@ class RainTPL{
 	 		}
 
 	 		//close no parse tag
-	 		elseif( preg_match( '/\{\/noparse\}/', $html ) )
+			elseif( strpos( $html, '{/noparse}' ) !== FALSE )
 	 			$comment_is_open = false;
 
 	 		//code between tag noparse is not compiled
@@ -368,15 +375,15 @@ class RainTPL{
  				$compiled_code .= $html;
 
 	 		//ignore
-	 		elseif( preg_match( '/\{ignore\}/', $html ) )
+			elseif( strpos( $html, '{ignore}' ) !== FALSE )
 	 			$ignore_is_open = true;
 
 	 		//noparse
-	 		elseif( preg_match( '/\{noparse\}/', $html ) )
+	 		elseif( strpos( $html, '{noparse}' ) !== FALSE )
 	 			$comment_is_open = true;
 
 			//include tag
-			elseif( preg_match( '/(?:\{include="(.*?)"(?: cache="(.*?)"){0,1}\})/', $html, $code ) ){
+			elseif( preg_match( '/(?:\{include="([^"]*)"(?: cache="([^"]*)"){0,1}\})/', $html, $code ) ){
 
 				//variables substitution
 				$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
@@ -410,7 +417,7 @@ class RainTPL{
 			}
 
 	 		//loop
-	 		elseif( preg_match( '/\{loop(?: name){0,1}="\${0,1}(.*?)"\}/', $html, $code ) ){
+			elseif( preg_match( '/\{loop(?: name){0,1}="\${0,1}([^"]*)"\}/', $html, $code ) ){
 
 	 			//increase the loop counter
 	 			$loop_level++;
@@ -429,7 +436,7 @@ class RainTPL{
 			}
 
 			//close loop tag
-			elseif( preg_match( '/\{\/loop\}/', $html ) ){
+			elseif( strpos( $html, '{/loop}' ) !== FALSE ) {
 
 				//iterator
 				$counter = "\$counter$loop_level";
@@ -443,7 +450,7 @@ class RainTPL{
 			}
 
 			//if
-			elseif( preg_match( '/\{if(?: condition){0,1}="(.*?)"\}/', $html, $code ) ){
+			elseif( preg_match( '/\{if(?: condition){0,1}="([^"]*)"\}/', $html, $code ) ){
 
 				//increase open if counter (for intendation)
 				$open_if++;
@@ -466,7 +473,7 @@ class RainTPL{
 			}
 
 			//elseif
-			elseif( preg_match( '/\{elseif(?: condition){0,1}="(.*?)"\}/', $html, $code ) ){
+			elseif( preg_match( '/\{elseif(?: condition){0,1}="([^"]*)"\}/', $html, $code ) ){
 
 				//tag
 				$tag = $code[ 0 ];
@@ -482,7 +489,7 @@ class RainTPL{
 			}
 
 			//else
-			elseif( preg_match( '/\{else\}/', $html ) ){
+			elseif( strpos( $html, '{else}' ) !== FALSE ) {
 
 				//else code
 				$compiled_code .=   '<?php }else{ ?>';
@@ -490,7 +497,7 @@ class RainTPL{
 			}
 
 			//close if tag
-			elseif( preg_match( '/\{\/if}/', $html ) ){
+			elseif( strpos( $html, '{/if}' ) !== FALSE ) {
 
 				//decrease if counter
 				$open_if--;
@@ -501,7 +508,7 @@ class RainTPL{
 			}
 
 			//function
-			elseif( preg_match( '/\{function="(.*?)(\((.*?)\)){0,1}"\}/', $html, $code ) ){
+			elseif( preg_match( '/\{function="([^(]*)(\([^)]*\)){0,1}"\}/', $html, $code ) ){
 
 				//tag
 				$tag = $code[ 0 ];
@@ -520,10 +527,10 @@ class RainTPL{
 			}
 
 			// show all vars
-			elseif( preg_match( '/\{\$template_info\}/', $html, $code ) ){
+			elseif ( strpos( $html, '{$template_info}' ) !== FALSE ) {
 
 				//tag
-				$tag = $code[ 0 ];
+				$tag  = '{$template_info}';
 
 				//if code
 				$compiled_code .=   '<?php echo "<pre>"; print_r( $this->var ); echo "</pre>"; ?>';
