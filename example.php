@@ -5,7 +5,7 @@
 
 	raintpl::configure("base_url", null );
 	raintpl::configure("tpl_dir", "tpl/" );
-	raintpl::configure("tmp_dir", "tmp/" );
+	raintpl::configure("cache_dir", "tmp/" );
 
 	//initialize a Rain TPL object
 	$tpl = new RainTPL;
