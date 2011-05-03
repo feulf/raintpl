@@ -233,8 +233,7 @@ class RainTPL{
 			$tpl_basedir                        = strpos($tpl_name,"/") ? dirname($tpl_name) . '/' : null;						// template basedirectory
 			$tpl_dir                            = self::$tpl_dir . $tpl_basedir;								// template directory
 			$this->tpl['tpl_filename']          = $tpl_dir . $tpl_basename . '.' . self::$tpl_ext;	// template filename
-			$cache_dir                          = self::$cache_dir . $tpl_dir;	// cache directory
-			$temp_compiled_filename             = $cache_dir . $tpl_basename;
+			$temp_compiled_filename             = self::$cache_dir . md5( $this->tpl['tpl_filename'] );
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.php';	// static cache filename
 
@@ -246,7 +245,7 @@ class RainTPL{
 
 			// file doesn't exsist, or the template was updated, Rain will compile the template
 			if( !file_exists( $this->tpl['compiled_filename'] ) || ( self::$check_template_update && filemtime($this->tpl['compiled_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
-				$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], $cache_dir, $this->tpl['compiled_filename'] );
+				$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], self::$cache_dir, $this->tpl['compiled_filename'] );
 				return true;
 			}
 			$this->tpl['checked'] = true;
@@ -267,9 +266,6 @@ class RainTPL{
 	 * @access private
 	 */
 	private function compileFile( $tpl_basename, $tpl_basedir, $tpl_filename, $cache_dir, $compiled_filename ){
-
-		// delete the old template file
-		array_map( "unlink", glob( $cache_dir . $tpl_basename . "*.php" ) );
 
 		//read template file
 		$this->tpl['source'] = $template_code = file_get_contents( $tpl_filename );
@@ -569,6 +565,9 @@ class RainTPL{
 	private function path_replace( $html, $tpl_basedir ){
 
 		if( self::$path_replace ){
+
+                        // reduce the path
+                        $path = preg_replace('/\w+\/\.\.\//', '', self::$base_url . self::$tpl_dir . $tpl_basedir );
 
 			$exp = $sub = array();
 
