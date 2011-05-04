@@ -83,6 +83,15 @@ class RainTPL{
 		static $check_template_update = true;
                 
 
+		/**
+		 * Debug mode flag.
+		 * True: debug mode is used, syntax errors are displayed directly in template. Execution of script is not terminated.
+		 * False: exception is thrown on found error.
+		 *
+		 * @var bool
+		 */
+		static $debug = false;
+
 	// -------------------------
 
 
@@ -140,9 +149,13 @@ class RainTPL{
 
 	function draw( $tpl_name, $return_string = false ){
 
-		// compile the template if necessary and set the template filepath
-		$this->check_template( $tpl_name );
-
+		try {
+			// compile the template if necessary and set the template filepath
+			$this->check_template( $tpl_name );
+		} catch (RainTpl_Exception $e) {
+			$output = $this->printDebug($e);
+			die($output);
+		}
 
 		// Cache is off and, return_string is false
                 // Rain just echo the template
@@ -843,6 +856,40 @@ class RainTPL{
 
 	}
 
+	/**
+	 * Prints debug info about exception or passes it further if debug is disabled.
+	 *
+	 * @param RainTpl_Exception $e
+	 * @return string
+	 */
+	private function printDebug(RainTpl_Exception $e){
+		if (!self::$debug) {
+			throw $e;
+		}
+		$output = sprintf('<h2>Exception: %s</h2><h3>%s</h3><p>template: %s</p>',
+			get_class($e),
+			$e->getMessage(),
+			$e->getTemplateFile()
+		);
+		if ($e instanceof RainTpl_SyntaxException) {
+			if (null != $e->getTemplateLine()) {
+				$output .= '<p>line: ' . $e->getTemplateLine() . '</p>';
+			}
+			if (null != $e->getTag()) {
+				$output .= '<p>in tag: ' . htmlspecialchars($e->getTag()) . '</p>';
+			}
+			if (null != $e->getTemplateLine() && null != $e->getTag()) {
+				$rows=explode("\n",  htmlspecialchars($this->tpl['source']));
+				$rows[$e->getTemplateLine()] = '<font color=red>' . $rows[$e->getTemplateLine()] . '</font>';
+				$output .= '<h3>template code</h3>' . implode('<br />', $rows) . '</pre>';
+			}
+		}
+		$output .= sprintf('<h3>trace</h3><p>In %s on line %d</p><pre>%s</pre>',
+			$e->getFile(), $e->getLine(),
+			nl2br(htmlspecialchars($e->getTraceAsString()))
+		);
+		return $output;
+	}
 }
 
 
