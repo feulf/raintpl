@@ -81,6 +81,7 @@ class RainTPL{
 		 *
 		 */
 		static $check_template_update = true;
+                
 
 	// -------------------------
 
@@ -99,6 +100,8 @@ class RainTPL{
 		private $tpl = array(),		// variables to keep the template directories and info
 			$cache = false,		// static cache enabled / disabled
                         $cache_id = null;       // identify only one cache
+
+                private static $config_name_sum = null;   // takes all the config to create the md5 of the file
 
 	// -------------------------
 
@@ -217,8 +220,10 @@ class RainTPL{
 		if( is_array( $setting ) )
 			foreach( $setting as $key => $value )
 				self::configure( $key, $value );
-		else if( property_exists( __CLASS__, $setting ) )
+		else if( property_exists( __CLASS__, $setting ) ){
 			self::$$setting = $value;
+                        self::$config_name_sum .= $value; // take trace of all config
+                }
 	}
 
 
@@ -233,7 +238,7 @@ class RainTPL{
 			$tpl_basedir                        = strpos($tpl_name,"/") ? dirname($tpl_name) . '/' : null;						// template basedirectory
 			$tpl_dir                            = self::$tpl_dir . $tpl_basedir;								// template directory
 			$this->tpl['tpl_filename']          = $tpl_dir . $tpl_basename . '.' . self::$tpl_ext;	// template filename
-			$temp_compiled_filename             = self::$cache_dir . md5( $this->tpl['tpl_filename'] );
+			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_basedir . self::$config_name_sum );
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.php';	// static cache filename
 
