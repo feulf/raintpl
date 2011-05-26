@@ -411,10 +411,8 @@ class RainTPL{
 								 'else{ ' .
 								 '$tpl_dir_temp = self::$tpl_dir;' .
 								 '$tpl->assign( $this->var );' .
-								 'self::$tpl_dir .= dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" );' .
 								 ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
-								 '$tpl->draw( $template );'.
-								 'self::$tpl_dir = $tpl_dir_temp;' .
+								 '$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . $template );'.
 								 '}' .
 								 '?>';
 				else
@@ -422,10 +420,8 @@ class RainTPL{
 					$compiled_code .= '<?php $tpl = new RainTPL;' .
 								 '$tpl_dir_temp = self::$tpl_dir;' .
 								 '$tpl->assign( $this->var );' .
-								 'self::$tpl_dir .= dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" );' .
 								 ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
-								 '$tpl->draw( basename("'.$include_var.'") );'.
-								 'self::$tpl_dir = $tpl_dir_temp;' .
+								 '$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
 								 '?>';
 
 			}
