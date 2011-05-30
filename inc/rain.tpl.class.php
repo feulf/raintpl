@@ -251,7 +251,7 @@ class RainTPL{
 			$tpl_basedir                        = strpos($tpl_name,"/") ? dirname($tpl_name) . '/' : null;						// template basedirectory
 			$tpl_dir                            = self::$tpl_dir . $tpl_basedir;								// template directory
 			$this->tpl['tpl_filename']          = $tpl_dir . $tpl_basename . '.' . self::$tpl_ext;	// template filename
-			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_basedir . self::$config_name_sum );
+			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_dir . self::$config_name_sum );
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.php';	// static cache filename
 
