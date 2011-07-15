@@ -337,7 +337,8 @@ class RainTPL{
 					'ignore_close'	=> '(\{\/ignore\})',
 					'include'	=> '(\{include="[^"]*"(?: cache="[^"]*")?\})',
 					'template_info'	=> '(\{\$template_info\})',
-							);
+                    'assign'      => '(\{assign(?: name){0,1}="\${0,1}[^"]*"\ value="[^"]*"\})',
+		);
 
 		$tag_regexp = "/" . join( "|", $tag_regexp ) . "/";
 
@@ -526,25 +527,38 @@ class RainTPL{
 				//function
 				$function = $code[ 1 ];
 
-				// check if there's any function disabled by black_list
+				//check if there's any function disabled by black_list
 				$this->function_check( $tag );
 
 				//parse the parameters
 				$parsed_param = isset( $code[2] ) ? $this->var_replace( $code[2], $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level ) : '()';
 
-				//if code
+				//function code
 				$compiled_code .=   "<?php echo {$function}{$parsed_param}; ?>";
 			}
 
-			// show all vars
+			//show all vars
 			elseif ( strpos( $html, '{$template_info}' ) !== FALSE ) {
 
 				//tag
 				$tag  = '{$template_info}';
 
-				//if code
+				//template_info code
 				$compiled_code .=   '<?php echo "<pre>"; print_r( $this->var ); echo "</pre>"; ?>';
 			}
+
+            //assign
+            elseif( preg_match( '/\{assign(?: name){0,1}="\${0,1}([^"]*)"\ value="([^"]*)"\}/', $html, $code ) ){
+
+                //variable
+                $variable = $code[ 1 ];
+
+                //value
+                $value = $this->var_replace( $code[2], $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level );
+
+                //assign code
+                $compiled_code .= '<?php $this->var["'.$variable.'"] = '.$value.'; $'.$variable.' = '.$value.' ?>';
+            }
 
 
 			//all html code
