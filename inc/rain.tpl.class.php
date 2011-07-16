@@ -754,6 +754,9 @@ class RainTPL{
 
                             // check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
                             $is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
+                            
+                            if( $is_init_variable )
+                                $extra_var = "=\$this->var['\$var']" . $extra_var;
 
                             //function associate to variable
                             $function_var = ( $extra_var and $extra_var[0] == '|') ? substr( $extra_var, 1 ) : null;
