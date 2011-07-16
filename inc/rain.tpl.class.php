@@ -754,6 +754,9 @@ class RainTPL{
 
                             // check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
                             $is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
+                            
+                            if( $is_init_variable )
+                                $extra_var = "=\$this->var['\$var']" . $extra_var;
 
                             //function associate to variable
                             $function_var = ( $extra_var and $extra_var[0] == '|') ? substr( $extra_var, 1 ) : null;
@@ -803,16 +806,16 @@ class RainTPL{
                                     elseif( $var_name == 'counter' )
                                             $php_var = '$counter' . $loop_level;
                                     else
-                                            $php_var = "\$" . $var_name . $variable_path;
+                                            $php_var = '$' . $var_name . $variable_path;
                             }else
-                                    $php_var = "\$" . $var_name . $variable_path;
-
+                                    $php_var = '$' . $var_name . $variable_path;
+                            
                             // compile the variable for php
                             if( isset( $function ) )
                                     $php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . ( $params ? "( $function( $php_var, $params ) )" : "$function( $php_var )" ) . $php_right_delimiter;
                             else
                                     $php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . $php_var . $extra_var . $php_right_delimiter;
-
+                            
                             $html = str_replace( $tag, $php_var, $html );
 
 
