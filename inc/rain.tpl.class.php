@@ -755,10 +755,6 @@ class RainTPL{
                             // check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
                             $is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
                             
-                            // if is an assignment also assign the variable to $this->var['value']
-                            if( $is_init_variable )
-                                $extra_var = "=\$this->var['\$var']" . $extra_var;
-
                             //function associate to variable
                             $function_var = ( $extra_var and $extra_var[0] == '|') ? substr( $extra_var, 1 ) : null;
 
@@ -775,11 +771,12 @@ class RainTPL{
                             $variable_path = str_replace( '[', '["', $variable_path );
                             $variable_path = str_replace( ']', '"]', $variable_path );
 
-                            //transform .$variable in ["$variable"]
-                            $variable_path = preg_replace('/\.\$(\w+)/', '["$\\1"]', $variable_path );
-
-                            //transform [variable] in ["variable"]
-                            $variable_path = preg_replace('/\.(\w+)/', '["\\1"]', $variable_path );
+                            //transform .$variable in ["$variable"] and .variable in ["variable"]
+                            $variable_path = preg_replace('/\.(\${0,1}\w+)/', '["\\1"]', $variable_path );
+                            
+                            // if is an assignment also assign the variable to $this->var['value']
+                            if( $is_init_variable )
+                                $extra_var = "=\$this->var['{$var_name}']{$variable_path}" . $extra_var;
 
                             //if there's a function
                             if( $function_var ){
