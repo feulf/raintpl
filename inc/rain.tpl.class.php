@@ -3,8 +3,8 @@
 /**
  *  RainTPL
  *  -------
- *	Realized by Federico Ulfo & maintained by the Rain Team
- *	Distributed under GNU/LGPL 3 License
+ *  Realized by Federico Ulfo & maintained by the Rain Team
+ *  Distributed under GNU/LGPL 3 License
  *
  *  @version 2.6.4
  */
@@ -107,8 +107,8 @@ class RainTPL{
 		public $var = array();
 
 		private $tpl = array(),		// variables to keep the template directories and info
-			$cache = false,		// static cache enabled / disabled
-                        $cache_id = null;       // identify only one cache
+                $cache = false,		// static cache enabled / disabled
+                $cache_id = null;       // identify only one cache
 
                 private static $config_name_sum = null;   // takes all the config to create the md5 of the file
 
@@ -158,42 +158,42 @@ class RainTPL{
 		}
 
 		// Cache is off and, return_string is false
-                // Rain just echo the template
+        // Rain just echo the template
 
-                if( !$this->cache && !$return_string ){
-                        extract( $this->var );
-            		include $this->tpl['compiled_filename'];
-                        unset( $this->tpl );
-                }
+        if( !$this->cache && !$return_string ){
+            extract( $this->var );
+            include $this->tpl['compiled_filename'];
+            unset( $this->tpl );
+        }
 
 
 		// cache or return_string are enabled
-                // rain get the output buffer to save the output in the cache or to return it as string
+        // rain get the output buffer to save the output in the cache or to return it as string
 
-                else{
+        else{
 
-                        //----------------------
-                        // get the output buffer
-                        //----------------------
-			ob_start();
-			extract( $this->var );
-			include $this->tpl['compiled_filename'];
-			$raintpl_contents = ob_get_contents();
-			ob_end_clean();
-                        //----------------------
+            //----------------------
+            // get the output buffer
+            //----------------------
+                ob_start();
+                extract( $this->var );
+                include $this->tpl['compiled_filename'];
+                $raintpl_contents = ob_get_contents();
+                ob_end_clean();
+            //----------------------
 
 
-                        // save the output in the cache
-			if( $this->cache )
-				file_put_contents( $this->tpl['cache_filename'], "<?php if(!class_exists('raintpl')){exit;}?>" . $raintpl_contents );
+            // save the output in the cache
+            if( $this->cache )
+                file_put_contents( $this->tpl['cache_filename'], "<?php if(!class_exists('raintpl')){exit;}?>" . $raintpl_contents );
 
-                        // free memory
-                        unset( $this->tpl );
+            // free memory
+            unset( $this->tpl );
 
-                        // return or print the template
-                        if( $return_string ) return $raintpl_contents; else echo $raintpl_contents;
+            // return or print the template
+            if( $return_string ) return $raintpl_contents; else echo $raintpl_contents;
 
-                }
+        }
 
 	}
 
@@ -210,15 +210,15 @@ class RainTPL{
 
 	function cache( $tpl_name, $expire_time = self::CACHE_EXPIRE_TIME, $cache_id = null ){
 
-                // set the cache_id
-                $this->cache_id = $cache_id;
+        // set the cache_id
+        $this->cache_id = $cache_id;
 
 		if( !$this->check_template( $tpl_name ) && file_exists( $this->tpl['cache_filename'] ) && ( time() - filemtime( $this->tpl['cache_filename'] ) < $expire_time ) )
 			return substr( file_get_contents( $this->tpl['cache_filename'] ), 43 );
 		else{
 			//delete the cache of the selected template
-                        if (file_exists($this->tpl['cache_filename']))
-                            unlink($this->tpl['cache_filename'] );
+            if (file_exists($this->tpl['cache_filename']))
+            unlink($this->tpl['cache_filename'] );
 			$this->cache = true;
 		}
 	}
@@ -235,8 +235,8 @@ class RainTPL{
 				self::configure( $key, $value );
 		else if( property_exists( __CLASS__, $setting ) ){
 			self::$$setting = $value;
-                        self::$config_name_sum .= $value; // take trace of all config
-                }
+            self::$config_name_sum .= $value; // take trace of all config
+        }
 	}
 
 
@@ -365,7 +365,7 @@ class RainTPL{
 
 		//variables initialization
 		$compiled_code = $open_if = $comment_is_open = $ignore_is_open = null;
-                $loop_level = 0;
+        $loop_level = 0;
 
 
 	 	//read all parsed code
@@ -651,6 +651,7 @@ class RainTPL{
 			$this->function_check( $tag );
 
 			$extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_level );
+            
 
 			// check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
 			$is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
@@ -679,30 +680,29 @@ class RainTPL{
 
 			//if there's a function
 			if( $function_var ){
-
-
-                                // check if there's a function or a static method and separate, function by parameters
+                
+                // check if there's a function or a static method and separate, function by parameters
 				$function_var = str_replace("::", "@double_dot@", $function_var );
 
-                                // get the position of the first :
-                                if( $dot_position = strpos( $function_var, ":" ) ){
+                // get the position of the first :
+                if( $dot_position = strpos( $function_var, ":" ) ){
 
-                                    // get the function and the parameters
-                                    $function = substr( $function_var, 0, $dot_position );
-                                    $params = substr( $function_var, $dot_position+1 );
+                    // get the function and the parameters
+                    $function = substr( $function_var, 0, $dot_position );
+                    $params = substr( $function_var, $dot_position+1 );
 
-                                }
-                                else{
+                }
+                else{
 
-                                    //get the function
-                                    $function = str_replace( "@double_dot@", "::", $function_var );
-                                    $params = null;
+                    //get the function
+                    $function = str_replace( "@double_dot@", "::", $function_var );
+                    $params = null;
 
-                                }
+                }
 
-                                // replace back the @double_dot@ with ::
-                                $function = str_replace( "@double_dot@", "::", $function );
-                                $params = str_replace( "@double_dot@", "::", $params );
+                // replace back the @double_dot@ with ::
+                $function = str_replace( "@double_dot@", "::", $function );
+                $params = str_replace( "@double_dot@", "::", $params );
 
 
 			}
@@ -778,18 +778,34 @@ class RainTPL{
                             if( $is_init_variable )
                                 $extra_var = "=\$this->var['{$var_name}']{$variable_path}" . $extra_var;
 
+                                
+
                             //if there's a function
                             if( $function_var ){
+                                
+                                    // check if there's a function or a static method and separate, function by parameters
+                                    $function_var = str_replace("::", "@double_dot@", $function_var );
 
-                                    //split function by function_name and parameters (ex substr:0,100)
-                                    $function_split = explode( ':', $function_var, 2 );
 
-                                    //function name
-                                    $function = $function_split[ 0 ];
+                                    // get the position of the first :
+                                    if( $dot_position = strpos( $function_var, ":" ) ){
 
-                                    //function parameters
-                                    $params = ( isset( $function_split[ 1 ] ) ) ? $function_split[ 1 ] : null;
+                                        // get the function and the parameters
+                                        $function = substr( $function_var, 0, $dot_position );
+                                        $params = substr( $function_var, $dot_position+1 );
 
+                                    }
+                                    else{
+
+                                        //get the function
+                                        $function = str_replace( "@double_dot@", "::", $function_var );
+                                        $params = null;
+
+                                    }
+
+                                    // replace back the @double_dot@ with ::
+                                    $function = str_replace( "@double_dot@", "::", $function );
+                                    $params = str_replace( "@double_dot@", "::", $params );
                             }
                             else
                                     $function = $params = null;

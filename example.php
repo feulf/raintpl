@@ -45,4 +45,11 @@
         // and then draw the output
         echo $html;
 
+        
+        class str{
+            function cut($t){
+                return substr($t, 1, 2 );
+            }
+        }
+        
 ?>
