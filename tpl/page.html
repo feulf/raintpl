@@ -17,7 +17,7 @@
 	
 		<h2>Variable example</h2>
 		<div class="layout">
-
+            
 			<h3>Variable example</h3>
 			<!-- all code between noparse tags is not compiled -->
 			<tt>variable <b>{$variable}</b></tt>
@@ -40,7 +40,7 @@
 				{$variable|substr:0,7}<br/>
 				a modifier on string: {"hello world"|strtoupper}
 			</tt>
-			
+
 			<br/><br/>
 			<h3>Global variables</h3>
 			<tt>The variable is declared as global into the PHP {$GLOBALS.global_variable}</tt>
@@ -135,14 +135,10 @@
 			<tt>{include="test"}</tt>
 		</div>
 		
-		<h2>Functions/Modifiers Example</h2>
+		<h2>Functions</h2>
 		<div class="layout">
-			<h3>Example of function: substr('Hello World!',1,8)</h3>
-			<tt>{function="substr('Hello World!',1,8)"}</tt>
-			
-			<h3>Example of equivalent modifier</h3>
-			<tt>{"Hello World!"|substr:1,8}</tt>
-
+			<h3>Example of function: ucfirst(strtolower($title))</h3>
+			<tt>{function="ucfirst(strtolower($title))"}</tt>
 		</div>
 		
 		<h2>Path Replace (WYSIWYG)</h2>

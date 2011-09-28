@@ -6,7 +6,7 @@
  *  Realized by Federico Ulfo & maintained by the Rain Team
  *  Distributed under GNU/LGPL 3 License
  *
- *  @version 2.6.4
+ *  @version 2.6.5
  */
 
 
@@ -324,19 +324,20 @@ class RainTPL{
 	private function compileTemplate( $template_code, $tpl_basedir ){
 
 		//tag list
-		$tag_regexp = array( 	'loop'	 	=> '(\{loop(?: name){0,1}="\${0,1}[^"]*"\})',
-					'loop_close'	=> '(\{\/loop\})',
-					'if'		=> '(\{if(?: condition){0,1}="[^"]*"\})',
-					'elseif'	=> '(\{elseif(?: condition){0,1}="[^"]*"\})',
-					'else'		=> '(\{else\})',
-					'if_close'	=> '(\{\/if\})',
-					'function'	=> '(\{function="[^"]*"\})',
-					'noparse'	=> '(\{noparse\})',
-					'noparse_close' => '(\{\/noparse\})',
-					'ignore'	=> '(\{ignore\})',
-					'ignore_close'	=> '(\{\/ignore\})',
-					'include'	=> '(\{include="[^"]*"(?: cache="[^"]*")?\})',
-					'template_info'	=> '(\{\$template_info\})',
+		$tag_regexp = array( 'loop'         => '(\{loop(?: name){0,1}="\${0,1}[^"]*"\})',
+                             'loop_close'   => '(\{\/loop\})',
+                             'if'           => '(\{if(?: condition){0,1}="[^"]*"\})',
+                             'elseif'       => '(\{elseif(?: condition){0,1}="[^"]*"\})',
+                             'else'         => '(\{else\})',
+                             'if_close'     => '(\{\/if\})',
+                             'function'     => '(\{function="[^"]*"\})',
+                             'noparse'      => '(\{noparse\})',
+                             'noparse_close'=> '(\{\/noparse\})',
+                             'ignore'       => '(\{ignore\})',
+                             'ignore_close'	=> '(\{\/ignore\})',
+                             'include'      => '(\{include="[^"]*"(?: cache="[^"]*")?\})',
+                             'template_info'=> '(\{\$template_info\})',
+                             'function'		=> '(\{function="(\w*?)(?:.*?)"\})'
 							);
 
 		$tag_regexp = "/" . join( "|", $tag_regexp ) . "/";
@@ -367,7 +368,6 @@ class RainTPL{
 		$compiled_code = $open_if = $comment_is_open = $ignore_is_open = null;
         $loop_level = 0;
 
-
 	 	//read all parsed code
 	 	while( $html = array_shift( $parsed_code ) ){
 
@@ -397,7 +397,7 @@ class RainTPL{
 	 			$comment_is_open = true;
 
 			//include tag
-			elseif( preg_match( '/(?:\{include="([^"]*)"(?: cache="([^"]*)"){0,1}\})/', $html, $code ) ){
+			elseif( preg_match( '/\{include="([^"]*)"(?: cache="([^"]*)"){0,1}\}/', $html, $code ) ){
 
 				//variables substitution
 				$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
@@ -518,7 +518,7 @@ class RainTPL{
 			}
 
 			//function
-			elseif( preg_match( '/\{function="([^(]*)(\([^)]*\)){0,1}"\}/', $html, $code ) ){
+			elseif( preg_match( '/\{function="(\w*)(.*?)"\}/', $html, $code ) ){
 
 				//tag
 				$tag = $code[ 0 ];
@@ -529,11 +529,14 @@ class RainTPL{
 				// check if there's any function disabled by black_list
 				$this->function_check( $tag );
 
-				//parse the parameters
-				$parsed_param = isset( $code[2] ) ? $this->var_replace( $code[2], $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level ) : '()';
-
+				if( empty( $code[ 2 ] ) )
+					$parsed_function = $function . "()";
+				else
+					// parse the function
+					$parsed_function = $function . $this->var_replace( $code[ 2 ], $tag_left_delimiter = null, $tag_right_delimiter = null, $php_left_delimiter = null, $php_right_delimiter = null, $loop_level );
+				
 				//if code
-				$compiled_code .=   "<?php echo {$function}{$parsed_param}; ?>";
+				$compiled_code .=   "<?php echo $parsed_function; ?>";
 			}
 
 			// show all vars
@@ -753,7 +756,7 @@ class RainTPL{
                             $extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_level );
 
                             // check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
-                            $is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
+                            $is_init_variable = preg_match( "/^(.*?)\=[^=](.*?)$/", $extra_var );
                             
                             //function associate to variable
                             $function_var = ( $extra_var and $extra_var[0] == '|') ? substr( $extra_var, 1 ) : null;
