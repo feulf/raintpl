@@ -756,7 +756,7 @@ class RainTPL{
                             $extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_level );
 
                             // check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
-                            $is_init_variable = preg_match( "/^(.*?)\=[^=](.*?)$/", $extra_var );
+                            $is_init_variable = preg_match( "/^[a-z_A-Z\.\[\](\-\>)]*=[^=]*$/", $extra_var );
                             
                             //function associate to variable
                             $function_var = ( $extra_var and $extra_var[0] == '|') ? substr( $extra_var, 1 ) : null;
@@ -1011,4 +1011,4 @@ class RainTpl_SyntaxException extends RainTpl_Exception{
 	}
 }
 
-?>
+// -- end
