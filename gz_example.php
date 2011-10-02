@@ -1,8 +1,9 @@
 <?php
 
-if( ! ob_start("ob_gzhandler") ) 
-    // if the browser don't support gz compression init the regular output buffer
-    ob_start();
+	// test if the browser support gz compression
+	if( ! ob_start("ob_gzhandler") ) 
+		// if the browser don't support gz compression init the regular output buffer
+		ob_start();
 
 
 	//include the RainTPL class
