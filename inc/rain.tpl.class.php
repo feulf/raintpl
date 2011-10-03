@@ -106,11 +106,11 @@ class RainTPL{
 		 */
 		public $var = array();
 
-		private $tpl = array(),		// variables to keep the template directories and info
-                $cache = false,		// static cache enabled / disabled
-                $cache_id = null;       // identify only one cache
+		protected $tpl = array(),		// variables to keep the template directories and info
+				  $cache = false,		// static cache enabled / disabled
+                  $cache_id = null;       // identify only one cache
 
-                private static $config_name_sum = null;   // takes all the config to create the md5 of the file
+        protected static $config_name_sum = null;   // takes all the config to create the md5 of the file
 
 	// -------------------------
 
@@ -243,7 +243,7 @@ class RainTPL{
 
 	// check if has to compile the template
 	// return true if the template has changed
-	private function check_template( $tpl_name ){
+	protected function check_template( $tpl_name ){
 
 		if( !isset($this->tpl['checked']) ){
 
@@ -273,17 +273,17 @@ class RainTPL{
 
 	/**
 	* execute stripslaches() on the xml block. Invoqued by preg_replace_callback function below
-	* @access private
+	* @access protected
 	*/
-	private function xml_reSubstitution($capture) {
+	protected function xml_reSubstitution($capture) {
     		return "<?php echo '<?xml ".stripslashes($capture[1])." ?>'; ?>";
 	} 
 
 	/**
 	 * Compile and write the compiled template file
-	 * @access private
+	 * @access protected
 	 */
-	private function compileFile( $tpl_basename, $tpl_basedir, $tpl_filename, $cache_dir, $compiled_filename ){
+	protected function compileFile( $tpl_basename, $tpl_basedir, $tpl_filename, $cache_dir, $compiled_filename ){
 
 		//read template file
 		$this->tpl['source'] = $template_code = file_get_contents( $tpl_filename );
@@ -319,9 +319,9 @@ class RainTPL{
 
 	/**
 	 * Compile template
-	 * @access private
+	 * @access protected
 	 */
-	private function compileTemplate( $template_code, $tpl_basedir ){
+	protected function compileTemplate( $template_code, $tpl_basedir ){
 
 		//tag list
 		$tag_regexp = array( 'loop'         => '(\{loop(?: name){0,1}="\${0,1}[^"]*"\})',
@@ -360,9 +360,9 @@ class RainTPL{
 
 	/**
 	 * Compile the code
-	 * @access private
+	 * @access protected
 	 */
-	private function compileCode( $parsed_code ){
+	protected function compileCode( $parsed_code ){
 
 		//variables initialization
 		$compiled_code = $open_if = $comment_is_open = $ignore_is_open = null;
@@ -580,7 +580,7 @@ class RainTPL{
 	 * @param string $html
 	 * @return string html sostituito
 	 */
-	private function path_replace( $html, $tpl_basedir ){
+	protected function path_replace( $html, $tpl_basedir ){
 
 		if( self::$path_replace ){
 
@@ -852,7 +852,7 @@ class RainTPL{
 	 * @param string $code
 	 * @param string $tag
 	 */
-	private function function_check( $code ){
+	protected function function_check( $code ){
 
 		$preg = '#(\W|\s)' . implode( '(\W|\s)|(\W|\s)', self::$black_list ) . '(\W|\s)#';
 
@@ -880,7 +880,7 @@ class RainTPL{
 	 * @param RainTpl_Exception $e
 	 * @return string
 	 */
-	private function printDebug(RainTpl_Exception $e){
+	protected function printDebug(RainTpl_Exception $e){
 		if (!self::$debug) {
 			throw $e;
 		}
@@ -918,7 +918,7 @@ class RainTpl_Exception extends Exception{
 	/**
 	 * Path of template file with error.
 	 */
-	private $templateFile = '';
+	protected $templateFile = '';
 
 	/**
 	 * Returns path of template file with error.
@@ -958,14 +958,14 @@ class RainTpl_SyntaxException extends RainTpl_Exception{
 	 *
 	 * @var int | null
 	 */
-	private $templateLine = null;
+	protected $templateLine = null;
 
 	/**
 	 * Tag which caused an error.
 	 *
 	 * @var string | null
 	 */
-	private $tag = null;
+	protected $tag = null;
 
 	/**
 	 * Returns line in template file where error has occured
