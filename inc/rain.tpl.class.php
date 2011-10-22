@@ -178,8 +178,7 @@ class RainTPL{
                 ob_start();
                 extract( $this->var );
                 include $this->tpl['compiled_filename'];
-                $raintpl_contents = ob_get_contents();
-                ob_end_clean();
+                $raintpl_contents = ob_get_clean();
             //----------------------
 
 
