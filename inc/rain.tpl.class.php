@@ -84,6 +84,16 @@ class RainTPL{
                 
 
 		/**
+		 * PHP tags <? ?> 
+		 * True: php tags are enabled into the template
+		 * False: php tags are disabled into the template and rendered as html
+		 *
+		 * @var bool
+		 */
+		static $php_enabled = false;
+
+		
+		/**
 		 * Debug mode flag.
 		 * True: debug mode is used, syntax errors are displayed directly in template. Execution of script is not terminated.
 		 * False: exception is thrown on found error.
@@ -291,7 +301,8 @@ class RainTPL{
 		$template_code = preg_replace( "/<\?xml(.*?)\?>/s", "##XML\\1XML##", $template_code );
 
 		//disable php tag
-		$template_code = str_replace( array("<?","?>"), array("&lt;?","?&gt;"), $template_code );
+		if( !self::$php_enabled )
+			$template_code = str_replace( array("<?","?>"), array("&lt;?","?&gt;"), $template_code );
 
 		//xml re-substitution
 		$template_code = preg_replace_callback ( "/##XML(.*?)XML##/s", array($this, 'xml_reSubstitution'), $template_code ); 
