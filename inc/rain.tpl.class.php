@@ -145,7 +145,32 @@ class RainTPL{
 			$this->var[ $variable ] = $value;
 	}
 
-
+        
+        
+	/**
+	 * Debug variable
+	 * eg. 	$t->debug_vars();
+	 *
+	 * @param mixed $variable_name Name of template variable or associative array name/value
+	 * @param mixed $value value assigned to this variable. Not set if variable_name is an associative array
+	 */
+        
+        public function debug_vars($name=null)  {
+        	if(!isset($name)) {
+            return $this->var;
+            
+              } elseif(isset($this->var[$name])) {
+         
+         } elseif(isset($this->var[$name])) {
+         	
+            return $this->var[$name];
+            
+        } else {
+        	
+            $_tmp = null;
+            return $_tmp;   
+        }
+    }
 
 	/**
 	 * Draw the template
@@ -915,6 +940,9 @@ class RainTPL{
 		$output .= sprintf('<h3>trace</h3><p>In %s on line %d</p><pre>%s</pre>',
 			$e->getFile(), $e->getLine(),
 			nl2br(htmlspecialchars($e->getTraceAsString()))
+		);
+		$output .= sprintf('<h3>Debug Vars</h3><p>',
+			$this->debug_vars();
 		);
 		return $output;
 	}
