@@ -208,7 +208,6 @@ class RainTPL{
 
 
 
-
 	/**
 	 * If exists a valid cache for this template it returns the cache
 	 *
@@ -420,18 +419,24 @@ class RainTPL{
 								 '	echo $cache;' .
 								 'else{ ' .
 								 '$tpl_dir_temp = self::$tpl_dir;' .
-								 '$tpl->assign( $this->var );' .
+								 '$tpl_dir_old = self::$tpl_dir;' .
+								 '$tpl_dir_new = $this->reduce_path( $tpl_dir_old . "/" . dirname($tpl_name) . "/" . dirname("'.$include_var.'") . "/" );'.
+								 'raintpl::configure( "tpl_dir", $tpl_dir_new );' .
 								 ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
 								 '$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . $template );'.
+								 'raintpl::configure( "tpl_dir", $tpl_dir_old );' .
 								 '}' .
 								 '?>';
 				else
 					//dynamic include
 					$compiled_code .= '<?php $tpl = new RainTPL;' .
-								 '$tpl_dir_temp = self::$tpl_dir;' .
+								 '$tpl_dir_old = self::$tpl_dir;' .
+								 '$tpl_dir_new = $this->reduce_path( $tpl_dir_old . "/" . dirname($tpl_name) . "/" . dirname("'.$include_var.'") . "/" );'.
+								 'raintpl::configure( "tpl_dir", $tpl_dir_new );' .
 								 '$tpl->assign( $this->var );' .
 								 ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
-								 '$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
+								 '$tpl->draw( basename("'.$include_var.'") );'.
+								 'raintpl::configure( "tpl_dir", $tpl_dir_old );' .
 								 '?>';
 
 			}
@@ -578,6 +583,13 @@ class RainTPL{
 		}
 		return $compiled_code;
 	}
+	
+	
+	
+	protected function reduce_path( $path ){
+		$path = str_replace( "//", "/", $path );
+		return preg_replace('/\w+\/\.\.\//', '', $path );
+	}
 
 
 
@@ -597,7 +609,7 @@ class RainTPL{
 			$tpl_dir = self::$base_url . self::$tpl_dir . $tpl_basedir;
 			
 			// reduce the path
-			$path = preg_replace('/\w+\/\.\.\//', '', $tpl_dir );
+			$path = $this->reduce_path($tpl_dir);
 
 			$exp = $sub = array();
 
