@@ -6,7 +6,7 @@
  *  Realized by Federico Ulfo & maintained by the Rain Team
  *  Distributed under GNU/LGPL 3 License
  *
- *  @version 2.6.5
+ *  @version 2.6.x
  */
 
 
@@ -120,7 +120,7 @@ class RainTPL{
 				  $cache = false,		// static cache enabled / disabled
                   $cache_id = null;       // identify only one cache
 
-        protected static $config_name_sum = null;   // takes all the config to create the md5 of the file
+                protected static $config_name_sum = array();   // takes all the config to create the md5 of the file
 
 	// -------------------------
 
@@ -243,7 +243,7 @@ class RainTPL{
 				self::configure( $key, $value );
 		else if( property_exists( __CLASS__, $setting ) ){
 			self::$$setting = $value;
-            self::$config_name_sum .= $value; // take trace of all config
+            self::$config_name_sum[$key] = $value; // take trace of all config
         }
 	}
 
@@ -259,7 +259,7 @@ class RainTPL{
 			$tpl_basedir                        = strpos($tpl_name,"/") ? dirname($tpl_name) . '/' : null;						// template basedirectory
 			$tpl_dir                            = self::$tpl_dir . $tpl_basedir;								// template directory
 			$this->tpl['tpl_filename']          = $tpl_dir . $tpl_basename . '.' . self::$tpl_ext;	// template filename
-			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_dir . self::$config_name_sum );
+			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_dir . implode('', self::$config_name_sum));
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.rtpl.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.rtpl.php';	// static cache filename
 
