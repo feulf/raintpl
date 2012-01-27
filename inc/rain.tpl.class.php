@@ -415,7 +415,7 @@ class RainTPL{
 				if( isset($code[ 2 ]) ){
 					
 					//dynamic include
-					$compiled_code .= '<?php $tpl = new RainTpl;' .
+					$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
 								 'if( $cache = $tpl->cache( $template = basename("'.$include_var.'") ) )' .
 								 '	echo $cache;' .
 								 'else{' .
@@ -428,7 +428,7 @@ class RainTPL{
 				else{
 	
 					//dynamic include
-					$compiled_code .= '<?php $tpl = new RainTpl;' .
+					$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
 									  '$tpl_dir_temp = self::$tpl_dir;' .
 									  '$tpl->assign( $this->var );' .
 									  ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
