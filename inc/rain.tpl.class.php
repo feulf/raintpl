@@ -342,8 +342,8 @@ class RainTPL{
                              'function'     => '(\{function="[^"]*"\})',
                              'noparse'      => '(\{noparse\})',
                              'noparse_close'=> '(\{\/noparse\})',
-                             'ignore'       => '(\{ignore\})',
-                             'ignore_close'	=> '(\{\/ignore\})',
+                             'ignore'       => '(\{ignore\}|\{\*)',
+                             'ignore_close'	=> '(\{\/ignore\}|\*\})',
                              'include'      => '(\{include="[^"]*"(?: cache="[^"]*")?\})',
                              'template_info'=> '(\{\$template_info\})',
                              'function'		=> '(\{function="(\w*?)(?:.*?)"\})'
