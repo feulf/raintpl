@@ -381,7 +381,7 @@ class RainTPL{
 	 	while( $html = array_shift( $parsed_code ) ){
 
 	 		//close ignore tag
-			if( !$comment_is_open && strpos( $html, '{/ignore}' ) !== FALSE )
+			if( !$comment_is_open && ( strpos( $html, '{/ignore}' ) !== FALSE || strpos( $html, '*}' ) !== FALSE ) )
 	 			$ignore_is_open = false;
 
 	 		//code between tag ignore id deleted
@@ -398,7 +398,7 @@ class RainTPL{
  				$compiled_code .= $html;
 
 	 		//ignore
-			elseif( strpos( $html, '{ignore}' ) !== FALSE )
+			elseif( strpos( $html, '{ignore}' ) !== FALSE || strpos( $html, '{*' ) !== FALSE )
 	 			$ignore_is_open = true;
 
 	 		//noparse

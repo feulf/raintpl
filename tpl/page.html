@@ -19,8 +19,8 @@
 		<div class="layout">
             
 			<h3>Variable example</h3>
-			<!-- all code between noparse tags is not compiled -->
-			<tt>variable <b>{$variable}</b></tt>
+			{* all code between noparse tags is not compiled *}
+			<tt>variable {noparse}{$variable}{/noparse} = <b>{$variable}</b></tt>
 
 			<br/><br/>
 			<h3>Variable assignment</h3>
@@ -159,7 +159,6 @@
 			<b>Absolute paths and path ending with # are not replaced</b>
 			<br/><br/>For more info read the documentation:
 			<tt><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/WYSIWYG/">http://www.raintpl.com/Documentation/Documentation-for-web-designers/WYSIWYG/</a></tt>
-
 
 		</div>
 
