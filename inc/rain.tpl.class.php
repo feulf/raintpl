@@ -136,13 +136,31 @@ class RainTPL{
 	 *
 	 * @param mixed $variable_name Name of template variable or associative array name/value
 	 * @param mixed $value value assigned to this variable. Not set if variable_name is an associative array
+	 * @param true/false $addAsArray if set 'true', the template variable will be or change to an array. makes easy to assign db loop values
 	 */
 
-	function assign( $variable, $value = null ){
+	function assign( $variable, $value = null ,$addAsArray=false){
 		if( is_array( $variable ) )
 			$this->var += $variable;
-		else
-			$this->var[ $variable ] = $value;
+		else{
+			if(isset($this->var[ $variable ])){
+				if(is_array($value) && is_array($this->var[ $variable ]))
+					$this->var[ $variable ]=array_merge ( $this->var[ $variable ],$value);
+				else{
+					if($addAsArray){
+						if(!is_array($this->var[ $variable ]))
+							$this->var[ $variable ]=array($this->var[ $variable ]);
+						$this->var[ $variable ]=array_merge ( $this->var[ $variable ],array($value));
+					}else
+						$this->var[ $variable ] = $value;
+				}
+			}else{
+				if($addAsArray)
+					$this->var[ $variable ] = array($value);
+				else
+					$this->var[ $variable ] = $value;
+			}
+		}
 	}
 
 
