@@ -6,7 +6,7 @@
  *  Realized by Federico Ulfo & maintained by the Rain Team
  *  Distributed under GNU/LGPL 3 License
  *
- *  @version 2.7
+ *  @version 2.7.2
  */
 
 
@@ -584,9 +584,15 @@ class RainTPL{
 	}
 	
 	
-	
+	/**
+	 * Reduce a path, eg. www/library/../filepath//file => www/filepath/file
+	 * @param type $path
+	 * @return type
+	 */
 	protected function reduce_path( $path ){
+		$path = str_replace( "://", "@not_replace@", $path );
 		$path = str_replace( "//", "/", $path );
+		$path = str_replace( "@not_replace@", "://", $path );
 		return preg_replace('/\w+\/\.\.\//', '', $path );
 	}
 
