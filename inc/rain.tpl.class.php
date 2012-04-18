@@ -263,14 +263,19 @@ class RainTPL{
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.rtpl.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.rtpl.php';	// static cache filename
 
-			// if the template doesn't exsist throw an error
-			if( self::$check_template_update && !file_exists( $this->tpl['tpl_filename'] ) ){
+			// if the template doesn't exist and is not an external source throw an error
+			if( self::$check_template_update && !file_exists( $this->tpl['tpl_filename'] ) && !preg_match('/http/', $tpl_name) ){
 				$e = new RainTpl_NotFoundException( 'Template '. $tpl_basename .' not found!' );
 				throw $e->setTemplateFile($this->tpl['tpl_filename']);
 			}
 
-			// file doesn't exsist, or the template was updated, Rain will compile the template
-			if( !file_exists( $this->tpl['compiled_filename'] ) || ( self::$check_template_update && filemtime($this->tpl['compiled_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
+			// We check if the template is not an external source
+			if(preg_match('/http/', $tpl_name)){
+				$this->compileFile('', '', $tpl_name, self::$cache_dir, $this->tpl['compiled_filename'] );
+				return true;
+			}
+			// file doesn't exist, or the template was updated, Rain will compile the template
+			elseif( !file_exists( $this->tpl['compiled_filename'] ) || ( self::$check_template_update && filemtime($this->tpl['compiled_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
 				$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], self::$cache_dir, $this->tpl['compiled_filename'] );
 				return true;
 			}
@@ -407,8 +412,9 @@ class RainTPL{
 
 			//include tag
 			elseif( preg_match( '/\{include="([^"]*)"(?: cache="([^"]*)"){0,1}\}/', $html, $code ) ){
-				if (preg_match("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", $code[1])) {
-					$compiled_code .= '<?php echo file_get_contents("'.$code[1].'"); ?>';
+				if (preg_match("/http/", $code[1])) {
+					$content = file_get_contents($code[1]);
+					$compiled_code .= $content;
 				} else {
 					//variables substitution
 					$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
