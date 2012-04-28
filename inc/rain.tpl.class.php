@@ -221,8 +221,10 @@ class RainTPL{
         // set the cache_id
         $this->cache_id = $cache_id;
 
-		if( !$this->check_template( $tpl_name ) && file_exists( $this->tpl['cache_filename'] ) && ( time() - filemtime( $this->tpl['cache_filename'] ) < $expire_time ) )
+		if( !$this->check_template( $tpl_name ) && file_exists( $this->tpl['cache_filename'] ) && ( time() - filemtime( $this->tpl['cache_filename'] ) < $expire_time ) ){
+			// return the cached file as HTML. It remove the first 43 character, which are a PHP code to secure the file <?php if(!class_exists('raintpl')){exit;}? >
 			return substr( file_get_contents( $this->tpl['cache_filename'] ), 43 );
+		}
 		else{
 			//delete the cache of the selected template
             if (file_exists($this->tpl['cache_filename']))
