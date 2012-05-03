@@ -265,14 +265,19 @@ class RainTPL{
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.rtpl.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.rtpl.php';	// static cache filename
 
-			// if the template doesn't exsist throw an error
-			if( self::$check_template_update && !file_exists( $this->tpl['tpl_filename'] ) ){
+			// if the template doesn't exist and is not an external source throw an error
+			if( self::$check_template_update && !file_exists( $this->tpl['tpl_filename'] ) && !preg_match('/http/', $tpl_name) ){
 				$e = new RainTpl_NotFoundException( 'Template '. $tpl_basename .' not found!' );
 				throw $e->setTemplateFile($this->tpl['tpl_filename']);
 			}
 
-			// file doesn't exsist, or the template was updated, Rain will compile the template
-			if( !file_exists( $this->tpl['compiled_filename'] ) || ( self::$check_template_update && filemtime($this->tpl['compiled_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
+			// We check if the template is not an external source
+			if(preg_match('/http/', $tpl_name)){
+				$this->compileFile('', '', $tpl_name, self::$cache_dir, $this->tpl['compiled_filename'] );
+				return true;
+			}
+			// file doesn't exist, or the template was updated, Rain will compile the template
+			elseif( !file_exists( $this->tpl['compiled_filename'] ) || ( self::$check_template_update && filemtime($this->tpl['compiled_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
 				$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], self::$cache_dir, $this->tpl['compiled_filename'] );
 				return true;
 			}
@@ -409,37 +414,38 @@ class RainTPL{
 
 			//include tag
 			elseif( preg_match( '/\{include="([^"]*)"(?: cache="([^"]*)"){0,1}\}/', $html, $code ) ){
+				if (preg_match("/http/", $code[1])) {
+					$content = file_get_contents($code[1]);
+					$compiled_code .= $content;
+				} else {
+					//variables substitution
+					$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
 
-				//variables substitution
-				$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
-
-				// if the cache is active
-				if( isset($code[ 2 ]) ){
-					
-					//dynamic include
-					$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
-								 'if( $cache = $tpl->cache( $template = basename("'.$include_var.'") ) )' .
-								 '	echo $cache;' .
-								 'else{' .
-								 '	$tpl_dir_temp = self::$tpl_dir;' .
-								 '	$tpl->assign( $this->var );' .
-									( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
-								 '	$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
-								 '} ?>';
+					// if the cache is active
+					if( isset($code[ 2 ]) ){
+						
+						//dynamic include
+						$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
+									 'if( $cache = $tpl->cache( $template = basename("'.$include_var.'") ) )' .
+									 '	echo $cache;' .
+									 'else{' .
+									 '	$tpl_dir_temp = self::$tpl_dir;' .
+									 '	$tpl->assign( $this->var );' .
+										( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
+									 '	$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
+									 '} ?>';
+					}
+					else{
+		
+						//dynamic include
+						$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
+										  '$tpl_dir_temp = self::$tpl_dir;' .
+										  '$tpl->assign( $this->var );' .
+										  ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
+										  '$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
+										  '?>';
+					}
 				}
-				else{
-	
-					//dynamic include
-					$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
-									  '$tpl_dir_temp = self::$tpl_dir;' .
-									  '$tpl->assign( $this->var );' .
-									  ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
-									  '$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
-									  '?>';
-					
-					
-				}
-
 			}
 
 	 		//loop
