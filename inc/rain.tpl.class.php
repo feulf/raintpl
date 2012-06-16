@@ -259,9 +259,9 @@ class RainTPL{
 
 			$tpl_basename                       = basename( $tpl_name );														// template basename
 			$tpl_basedir                        = strpos($tpl_name,"/") ? dirname($tpl_name) . '/' : null;						// template basedirectory
-			$tpl_dir                            = self::$tpl_dir . $tpl_basedir;								// template directory
-			$this->tpl['tpl_filename']          = $tpl_dir . $tpl_basename . '.' . self::$tpl_ext;	// template filename
-			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $tpl_dir . serialize(self::$config_name_sum));
+			$this->tpl['template_directory']    = self::$tpl_dir . $tpl_basedir;								// template directory
+			$this->tpl['tpl_filename']          = $this->tpl['template_directory'] . $tpl_basename . '.' . self::$tpl_ext;	// template filename
+			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $this->tpl['template_directory'] . serialize(self::$config_name_sum));
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.rtpl.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.rtpl.php';	// static cache filename
 
@@ -421,29 +421,38 @@ class RainTPL{
 					//variables substitution
 					$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
 
+                                        //get the folder of the actual template
+                                        $actual_folder = substr( $this->tpl['template_directory'], strlen(static::$tpl_dir) );
+
+                                        //get the included template
+                                        $include_template = $actual_folder . $include_var;
+
+                                        // reduce the path
+                                        $include_template = preg_replace('/\w+\/\.\.\//', '', $include_template );
+
 					// if the cache is active
 					if( isset($code[ 2 ]) ){
-						
-						//dynamic include
-						$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
-									 'if( $cache = $tpl->cache( $template = basename("'.$include_var.'") ) )' .
-									 '	echo $cache;' .
-									 'else{' .
-									 '	$tpl_dir_temp = self::$tpl_dir;' .
-									 '	$tpl->assign( $this->var );' .
-										( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
-									 '	$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
-									 '} ?>';
+
+                                                //include
+                                                $compiled_code .= '<?php $tpl = new '.get_called_class().';' .
+                                                                  'if( $cache = $tpl->cache( "'.$include_var.'" ) )' .
+								  '	echo $cache;' .
+								  'else{' .
+                                                                  '$tpl->assign( $this->var );' .
+                                                                  ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
+                                                                  '$tpl->draw( "'.$include_template.'" );'.
+                                                                  '}' .
+                                                                  '?>';
+
 					}
 					else{
-		
-						//dynamic include
-						$compiled_code .= '<?php $tpl = new '.get_class($this).';' .
-										  '$tpl_dir_temp = self::$tpl_dir;' .
-										  '$tpl->assign( $this->var );' .
-										  ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
-										  '$tpl->draw( dirname("'.$include_var.'") . ( substr("'.$include_var.'",-1,1) != "/" ? "/" : "" ) . basename("'.$include_var.'") );'.
-										  '?>';
+                                                //include
+                                                $compiled_code .= '<?php $tpl = new '.get_called_class().';' .
+                                                                  '$tpl->assign( $this->var );' .
+                                                                  ( !$loop_level ? null : '$tpl->assign( "key", $key'.$loop_level.' ); $tpl->assign( "value", $value'.$loop_level.' );' ).
+                                                                  '$tpl->draw( "'.$include_template.'" );'.
+                                                                  '?>';
+
 					}
 				}
 			}
