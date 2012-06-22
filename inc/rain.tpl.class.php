@@ -428,7 +428,7 @@ class RainTPL{
                                         $include_template = $actual_folder . $include_var;
 
                                         // reduce the path
-                                        $include_template = preg_replace('/\w+\/\.\.\//', '', $include_template );
+                                        $include_template = $this->reduce_path( $include_template );
 
 					// if the cache is active
 					if( isset($code[ 2 ]) ){
@@ -610,7 +610,9 @@ class RainTPL{
 		$path = str_replace( "://", "@not_replace@", $path );
 		$path = str_replace( "//", "/", $path );
 		$path = str_replace( "@not_replace@", "://", $path );
-		return preg_replace('/\w+\/\.\.\//', '', $path );
+		$path = str_replace( "/./", "/", $path );
+		$path = preg_replace('/\w+\/\.\.\//', '', $path );
+                return $path;
 	}
 
 
