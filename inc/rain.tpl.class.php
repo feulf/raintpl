@@ -379,13 +379,18 @@ class RainTPL{
 	 * @access protected
 	 */
 	protected function compileCode( $parsed_code ){
+            
+                // if parsed code is empty return null string
+                if( !$parsed_code )
+                    return "";
 
 		//variables initialization
 		$compiled_code = $open_if = $comment_is_open = $ignore_is_open = null;
-        $loop_level = 0;
+                $loop_level = 0;
 
+                
 	 	//read all parsed code
-	 	while( $html = array_shift( $parsed_code ) ){
+	 	foreach( $parsed_code as $html ){
 
 	 		//close ignore tag
 			if( !$comment_is_open && ( strpos( $html, '{/ignore}' ) !== FALSE || strpos( $html, '*}' ) !== FALSE ) )
