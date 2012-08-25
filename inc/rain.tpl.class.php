@@ -440,7 +440,7 @@ class RainTPL{
 
                                                 //include
                                                 $compiled_code .= '<?php $tpl = new '.get_called_class().';' .
-                                                                  'if( $cache = $tpl->cache( "'.$include_var.'" ) )' .
+                                                                  'if( $cache = $tpl->cache( "'.$include_template.'" ) )' .
 								  '	echo $cache;' .
 								  'else{' .
                                                                   '$tpl->assign( $this->var );' .
