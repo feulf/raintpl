@@ -612,12 +612,15 @@ class RainTPL{
 	 * @return type
 	 */
 	protected function reduce_path( $path ){
-		$path = str_replace( "://", "@not_replace@", $path );
-		$path = str_replace( "//", "/", $path );
-		$path = str_replace( "@not_replace@", "://", $path );
-		$path = str_replace( "/./", "/", $path );
-		$path = preg_replace('/\w+\/\.\.\//', '', $path );
-                return $path;
+            $path = str_replace( "://", "@not_replace@", $path );
+            $path = preg_replace( "#(/+)#", "/", $path );
+            $path = preg_replace( "#(/\./+)#", "/", $path );
+            $path = str_replace( "@not_replace@", "://", $path );
+            
+            while( preg_match( '#\.\./#', $path ) ){
+                $path = preg_replace('#\w+/\.\./#', '', $path );
+            }
+            return $path;
 	}
 
 
