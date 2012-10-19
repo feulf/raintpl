@@ -264,7 +264,8 @@ class RainTPL{
 			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $this->tpl['template_directory'] . serialize(self::$config_name_sum));
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.rtpl.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.rtpl.php';	// static cache filename
-
+                        $this->tpl['checked']               = true;
+                        
 			// if the template doesn't exist and is not an external source throw an error
 			if( self::$check_template_update && !file_exists( $this->tpl['tpl_filename'] ) && !preg_match('/http/', $tpl_name) ){
 				$e = new RainTpl_NotFoundException( 'Template '. $tpl_basename .' not found!' );
@@ -281,7 +282,7 @@ class RainTPL{
 				$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], self::$cache_dir, $this->tpl['compiled_filename'] );
 				return true;
 			}
-			$this->tpl['checked'] = true;
+			
 		}
 	}
 
