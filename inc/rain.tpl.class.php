@@ -140,7 +140,7 @@ class RainTPL{
 
 	function assign( $variable, $value = null ){
 		if( is_array( $variable ) )
-			$this->var += $variable;
+			$this->var = $variable + $this->var;
 		else
 			$this->var[ $variable ] = $value;
 	}
