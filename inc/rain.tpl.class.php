@@ -428,7 +428,7 @@ class RainTPL{
 					$include_var = $this->var_replace( $code[ 1 ], $left_delimiter = null, $right_delimiter = null, $php_left_delimiter = '".' , $php_right_delimiter = '."', $loop_level );
 
                                         //get the folder of the actual template
-                                        $actual_folder = substr( $this->tpl['template_directory'], strlen(static::$tpl_dir) );
+                                        $actual_folder = substr( $this->tpl['template_directory'], strlen(self::$tpl_dir) );
 
                                         //get the included template
                                         $include_template = $actual_folder . $include_var;
