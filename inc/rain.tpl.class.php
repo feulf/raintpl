@@ -647,27 +647,27 @@ class RainTPL{
 			$exp = $sub = array();
 
 			if( in_array( "img", self::$path_replace_list ) ){
-				$exp = array( '/<img(.*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<img(.*?)src=(?:")([^"]+?)#(?:")/i', '/<img(.*?)src="(.*?)"/', '/<img(.*?)src=(?:\@)([^"]+?)(?:\@)/i' );
+				$exp = array( '/<img(.[^<]*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/iU', '/<img(.[^<]*?)src=(?:")([^"]+?)#(?:")/iU', '/<img(.[^<]*?)src="(.*?)"/iU', '/<img(.[^<]*?)src=(?:\@)([^"]+?)(?:\@)/iU' );
 				$sub = array( '<img$1src=@$2://$3@', '<img$1src=@$2@', '<img$1src="' . $path . '$2"', '<img$1src="$2"' );
 			}
 
 			if( in_array( "script", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<script(.*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<script(.*?)src=(?:")([^"]+?)#(?:")/i', '/<script(.*?)src="(.*?)"/', '/<script(.*?)src=(?:\@)([^"]+?)(?:\@)/i' ) );
+				$exp = array_merge( $exp , array( '/<script(.[^<]*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/iU', '/<script(.[^<]*?)src=(?:")([^"]+?)#(?:")/iU', '/<script(.[^<]*?)src="(.*?)"/iU', '/<script(.[^<]*?)src=(?:\@)([^"]+?)(?:\@)/iU' ) );
 				$sub = array_merge( $sub , array( '<script$1src=@$2://$3@', '<script$1src=@$2@', '<script$1src="' . $path . '$2"', '<script$1src="$2"' ) );
 			}
 
 			if( in_array( "link", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<link(.*?)href=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<link(.*?)href=(?:")([^"]+?)#(?:")/i', '/<link(.*?)href="(.*?)"/', '/<link(.*?)href=(?:\@)([^"]+?)(?:\@)/i' ) );
+				$exp = array_merge( $exp , array( '/<link(.[^<]*?)href=(?:")(http|https)\:\/\/([^"]+?)(?:")/iU', '/<link(.[^<]*?)href=(?:")([^"]+?)#(?:")/iU', '/<link(.[^<]*?)href="(.*?)"/iU', '/<link(.[^<]*?)href=(?:\@)([^"]+?)(?:\@)/iU' ) );
 				$sub = array_merge( $sub , array( '<link$1href=@$2://$3@', '<link$1href=@$2@' , '<link$1href="' . $path . '$2"', '<link$1href="$2"' ) );
 			}
 
 			if( in_array( "a", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<a(.*?)href=(?:")(http\:\/\/|https\:\/\/|javascript:|mailto:)([^"]+?)(?:")/i', '/<a(.*?)href="(.*?)"/', '/<a(.*?)href=(?:\@)([^"]+?)(?:\@)/i'  ) );
+				$exp = array_merge( $exp , array( '/<a(.[^<]*?)href=(?:")(http\:\/\/|https\:\/\/|javascript:|mailto:)([^"]+?)(?:")/iU', '/<a(.[^<]*?)href="(.*?)"/iU', '/<a(.[^<]*?)href=(?:\@)([^"]+?)(?:\@)/iU'  ) );
 				$sub = array_merge( $sub , array( '<a$1href=@$2$3@', '<a$1href="' . self::$base_url . '$2"', '<a$1href="$2"' ) );
 			}
 
 			if( in_array( "input", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<input(.*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<input(.*?)src=(?:")([^"]+?)#(?:")/i', '/<input(.*?)src="(.*?)"/', '/<input(.*?)src=(?:\@)([^"]+?)(?:\@)/i' ) );
+				$exp = array_merge( $exp , array( '/<input(.[^<]*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/iU', '/<input(.[^<]*?)src=(?:")([^"]+?)#(?:")/iU', '/<input(.[^<]*?)src="(.*?)"/iU', '/<input(.[^<]*?)src=(?:\@)([^"]+?)(?:\@)/iU' ) );
 				$sub = array_merge( $sub , array( '<input$1src=@$2://$3@', '<input$1src=@$2@', '<input$1src="' . $path . '$2"', '<input$1src="$2"' ) );
 			}
 
