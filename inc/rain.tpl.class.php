@@ -478,7 +478,7 @@ class RainTPL{
 				$value = "\$value$loop_level";           // value
 
 				//loop code
-				$compiled_code .=  "<?php $counter=-1; if( isset($var) && is_array($var) && sizeof($var) ) foreach( $var as $key => $value ){ $counter++; ?>";
+				$compiled_code .=  "<?php $counter=-1; if( $var !== null && is_array($var) && sizeof($var) ) foreach( $var as $key => $value ){ $counter++; ?>";
 
 			}
 
