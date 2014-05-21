@@ -1,79 +1,147 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset='utf-8'>
+<title>RainTPL - easy php template engine</title>
+<link id="page_favicon" href="http://www.raintpl.com/tpl/raintpl/favicon.ico" rel="icon" type="image/x-icon"/>
+<link rel="stylesheet" href="http://www.raintpl.com/tpl/raintpl/css/style.css" type="text/css"/>
 
-  <title>rainphp/raintpl @ GitHub</title>
+<script src="http://www.raintpl.com/inc/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="http://www.raintpl.com/inc/js/generic.js" type="text/javascript"></script>
 
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #61a61f;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #ffffff;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #9e59e0; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #9e59e0; }
-    h3 { text-align: center; color: #9e59e0; }
-    a { color: #9e59e0; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
+
+<script>var time;function openpopup(o){var date=new Date();time=date.getTime();var m=o.title;var ma=m.split(' - ');$('#message').html('<b>'+ma[0]+'</b><br/>'+ma[1]+'<br/>').fadeIn('fast');$('#message').css('left',o.x-50);$('#message').css('top',o.y-50);}
+function closepopup(){setTimeout("_closepopup()",500)}
+function _closepopup(){var date=new Date()
+if(date.getTime()-time>500)
+$('#message').fadeOut("slow");}</script>
+
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-5639487-4']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();var ajaxurl='http://www.raintpl.com/index.server.php';</script>
 </head>
-
 <body>
-  <a href="http://github.com/rainphp/raintpl"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-  <div id="container">
+<div id="header_msg"><div style="float:left;">The <b>easy</b> and <a href="http://www.raintpl.com/PHP-Template-Engines-Speed-Test/">fast</a> template engine for <span>PHP</span>. &nbsp; <a href="http://www.raintpl.com/FAQ/"><b>Rain<span>.TPL</span></b></a> makes application easier to create & enables designers/developers to work better together.</div><div style="float:right;">Try <a href="http://www.raincms.com/" target="_blank">Rain <span>CMS</span></a> and <a href="http://www.rainframework.com/" target="_blank">Rain <span>Framework</span></a></div></div>
 
-    <div class="download">
-      <a href="http://github.com/rainphp/raintpl/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/rainphp/raintpl/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
+<div id="header">
+	<div id="login"><a target="_blank" href="https://github.com/rainphp">Follow on Github</a></div>
+	<div id="search"><div><form method="get" name="search" action="http://www.raintpl.com/search/"><input type="text" name="search"/></form></div></div>
+	<div id="logo"><a href="http://www.raintpl.com"><img src="http://www.raintpl.com/tpl/raintpl/img/logo.jpg" title="raintpl"></a><br>&nbsp;easy PHP template engine</div>
+</div>
 
-    <h1><a href="http://github.com/rainphp/raintpl">raintpl</a>
-      <span class="small">by <a href="http://github.com/rainphp">rainphp</a></span></h1>
+<div id="nav">
+	
+		<a href="http://www.raintpl.com/" class="selected">Home</a> &nbsp
+	
+		<a href="http://www.raintpl.com/Download/">Download</a> &nbsp
+	
+		<a href="http://www.raintpl.com/Quick-Start/">Quick Start</a> &nbsp
+	
+		<a href="http://www.raintpl.com/Documentation/">Documentation</a> &nbsp
+	
+		<a href="http://www.raintpl.com/PHP-Template-Engines-Speed-Test/">Speed Test</a> &nbsp
+	
+		<a href="http://www.raintpl.com/Forum/">Forum</a> &nbsp
+	
+		<a href="http://www.raintpl.com/Credits/">Credits</a> &nbsp
+	
+</div>
 
-    <div class="description">
-      Easy Php Template Engine
-    </div>
+<div id="home">
+<div id="message"></div>
 
-    <p>The easy and fast template engine for PHP.   Rain.TPL makes application easier to create & enables designers/developers to work better together.</p><h2>Install</h2>
-<p>Extract and copy the raintpl in your htdocs directory</p>
-<h2>Authors</h2>
-<p>Rain (rainelemental@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Rain (rainelemental@gmail.com)<br/>      </p>
+		<div class="block">
+			<a href="http://www.raintpl.com/Quick-Start/">
+				<img src="http://www.raintpl.com/tpl/raintpl/img/easy.jpg" title="Easy - Really easy to install and to use" onmouseover="openpopup(this)" onmouseout="closepopup()"/>
+				<img src="http://www.raintpl.com/tpl/raintpl/img/easy_text.jpg" title="Easy PHP Template Engine"/>
+			</a>
+			<div>
+				8 Tags<br/>
+				4 Methods
+			</div>
+		</div>
+		<div class="block_separator">&nbsp;</div>
+		<div class="block">
+			<a href="http://www.raintpl.com/PHP-Template-Engines-Speed-Test/">
+				<img src="http://www.raintpl.com/tpl/raintpl/img/fast.jpg" title="Fast - Click to see the speed test" onmouseover="openpopup(this)" onmouseout="closepopup()"/>
+				<img src="http://www.raintpl.com/tpl/raintpl/img/fast_text.jpg" title="Fast PHP Template Engine"/>
+			</a>
+			<div>
+				compiles HTML to PHP<!--<br> to improve speed-->
+			</div>
+		</div>
+		<div class="block_separator">&nbsp;</div>
+		<div class="block">
+			<a href="http://www.raintpl.com/FAQ/">
+				<img src="http://www.raintpl.com/tpl/raintpl/img/useful.jpg" title="Useful - Designers create templates, developers load them" onmouseover="openpopup(this)" onmouseout="closepopup()"/>
+				<img src="http://www.raintpl.com/tpl/raintpl/img/useful_text.jpg" title="Divide logic by presentation"/>
+			</a>
+			<div>
+				divides logic by graphic
+			</div>
+		</div>
+		<div class="block_separator">&nbsp;</div>
+		<div class="block">
+			<a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/WYSIWYG/">
+				<img src="http://www.raintpl.com/tpl/raintpl/img/wysiwyg.jpg" title="WYSIWYG - You can design with relative paths, Rain will replace them!" onmouseover="openpopup(this)" onmouseout="closepopup()"/>
+				<img src="http://www.raintpl.com/tpl/raintpl/img/wysiwyg_text.jpg" title="WYSIWYG template"/>
+			</a>
+			<div>
+				designs HTML templates
+			</div>
+		</div>
 
+</div>
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/rainphp/raintpl/zipball/master">zip</a> or
-      <a href="http://github.com/rainphp/raintpl/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/rainphp/raintpl</pre>
-    </p>
+<div id="news_home">
+					<script src="http://www.raintpl.com/tpl/raintpl/news/../js/jquery.innerfade.js" type="text/javascript"></script>
+				<script type="text/javascript">$(document).ready(function(){$('#news_ticker').innerfade({speed:'slow',timeout:5000,type:'sequence',bodyheight:'20px'});});</script>
 
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/rainphp/raintpl">rainphp/raintpl</a>
-    </div>
+							<div id="ticker">
+								<ul id="news_ticker">
+								
+									<li class="first">
+										
+										<div class="date">Jul 2013</div><h2><a href="http://www.raintpl.com/News/2013/07/20/A-few-(nice)-words-on-the-Rain-Projects/">A few (nice) words on the Rain Projects</a></h2><div class="text">Hi everyone,&nbsp;it's been a really hot summer in New York city, one of those insanely humid, temperature arrived to over 100 F (37 C) and humidity to over 70%, but this won't stop us from coding, and...</div>
+									</li>
+								
+									<li>
+										
+										<div class="date">Jan 2013</div><h2><a href="http://www.raintpl.com/News/2013/01/17/RainTPL-3-final-version-online-on-Packagist/">RainTPL 3 final version online on Packagist</a></h2><div class="text">RainTPL 3 is been officially released and is been published on Packagist, so you'll be able to download it from github or install in your application with Composer (the suggested way).&nbsp;We also...</div>
+									</li>
+								
+									<li>
+										
+										<div class="date">Dec 2012</div><h2><a href="http://www.raintpl.com/News/2012/12/24/RainTPL-on-Composer/">RainTPL on Composer</a></h2><div class="text"></div>
+									</li>
+								
+									<li>
+										
+										<div class="date">Sep 2012</div><h2><a href="http://www.raintpl.com/News/2012/09/20/Try.github-the-most-amazing-way-to-learn-Github/">Try.github the most amazing way to learn Github</a></h2><div class="text">That's the most amazing way to learn git and github: http://try.github.com/ Try it if you want to learn git to contribute to the RainTPL project or even to create your own repository. And please...</div>
+									</li>
+								
+									<li>
+										
+										<div class="date">Sep 2012</div><h2><a href="http://www.raintpl.com/News/2012/09/12/RainTPL-3-progress/">RainTPL 3 progress</a></h2><div class="text">Slowly RainTPL 3 is moving forward thanks to the sinergy of our awesome community. In the meaning time we are also working on the RainCMS and preparing a wiki module to create the new...</div>
+									</li>
+								
+									<li>
+										
+										<div class="date">Jul 2012</div><h2><a href="http://www.raintpl.com/News/2012/07/20/Rain-on-Cloud-Server/">Rain on Cloud Server</a></h2><div class="text">You may notice that this website is going way faster, well we moved all Rain project websites on the cloud! Now we are on Cloud Server on Rackspace, in the next few weeks we'll also upgrade the...</div>
+									</li>
+								
+	                            </ul>
+	                        </div>
+                            <a class="link" href="http://www.raintpl.com/News/">all news</a>
 
-  </div>
+</div>
 
-  
+<div id="footer">
+	<div class="left"><a href="http://www.raintpl.com/" class="selected">Home</a><a href="http://www.raintpl.com/Download/">Download</a><a href="http://www.raintpl.com/Quick-Start/">Quick Start</a><a href="http://www.raintpl.com/Documentation/">Documentation</a><a href="http://www.raintpl.com/PHP-Template-Engines-Speed-Test/">Speed Test</a><a href="http://www.raintpl.com/Forum/">Forum</a><a href="http://www.raintpl.com/Credits/">Credits</a>
+	<br><br>
+	<a href="http://www.raintpl.com/FAQ/">FAQ</a><a href="http://www.raintpl.com/News/">News</a><a href="http://www.raintpl.com/Links/">Links</a><a href="http://www.raintpl.com/sitemap/">Sitemap</a>
+	</div>
+	<div class="right">Copyright <a href="http://www.raintm.com/" target="_blank">RainTM</a></div>
+</div>
+
 </body>
 </html>
