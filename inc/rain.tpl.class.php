@@ -342,6 +342,7 @@ class RainTPL{
 
 		//tag list
 		$tag_regexp = array( 'loop'         => '(\{loop(?: name){0,1}="\${0,1}[^"]*"\})',
+			     'break'	    => '(\{break\})',
                              'loop_close'   => '(\{\/loop\})',
                              'if'           => '(\{if(?: condition){0,1}="[^"]*"\})',
                              'elseif'       => '(\{elseif(?: condition){0,1}="[^"]*"\})',
@@ -479,6 +480,14 @@ class RainTPL{
 
 				//loop code
 				$compiled_code .=  "<?php $counter=-1; if( isset($var) && is_array($var) && sizeof($var) ) foreach( $var as $key => $value ){ $counter++; ?>";
+
+			}
+			
+			// loop break
+			elseif( strpos( $html, '{break}' ) !== FALSE ) {
+
+				//else code
+				$compiled_code .=   '<?php break; ?>';
 
 			}
 
