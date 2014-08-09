@@ -703,8 +703,7 @@ class RainTPL{
 
 			return preg_replace_callback(
 				$exp,
-				function ($matches) {
-					global $path;
+				function ($matches) use ($path) {
 					$tag  = $matches[1];
 					$_    = $matches[2];
 					$attr = $matches[3];
