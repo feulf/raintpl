@@ -704,11 +704,12 @@ class RainTPL{
 			return preg_replace_callback(
 				$exp,
 				function ($matches) {
+					global $path;
 					$tag  = $matches[1];
 					$_    = $matches[2];
 					$attr = $matches[3];
 					$url  = $matches[4];
-					$new_url = rewrite_url($url, $tag, $path);
+					$new_url = $this->rewrite_url($url, $tag, $path);
 
 					return "<$tag$_$attr=\"$new_url\"";
 				},
