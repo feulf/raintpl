@@ -636,10 +636,53 @@ class RainTPL{
 
 
 	/**
-	 * replace the path of image src, link href and a href.
-	 * url => template_dir/url
-	 * url# => url
+	 * Replace URL according to the following rules:
 	 * http://url => http://url
+	 * url# => url
+	 * /url => base_dir/url
+	 * url => path/url (where path generally is base_url/template_dir)
+	 * (The last one is => base_dir/url for <a> href)
+	 *
+	 * @param string $url Url to rewrite.
+	 * @param string $tag Tag in which the url has been found.
+	 * @param string $path Path to prepend to relative URLs.
+	 * @return string rewritten url
+	 */
+	protected function rewrite_url($url, $tag, $path) {
+		// If we don't have to rewrite for this tag, do nothing.
+		if(!in_array($tag, self::$path_replace_list)) {
+			return $url;
+		}
+
+		// Make protocol list. It is a little bit different for <a>.
+		$protocol = 'http|https|ftp|file|apt|magnet';
+		if ($tag == 'a') {
+			$protocol .= '|mailto|javascript';
+		}
+
+		// Regex for URLs that should not change (except the leading #)
+		$no_change = "/(^($protocol)\:)|(#$)/i";
+		if (preg_match($no_change, $url)) {
+			return rtrim($url, '#');
+		}
+
+		// Regex for URLs that need only base url (and not template dir)
+		$base_only = '/^\//';
+		if ($tag == 'a' or $tag == 'form') {
+			$base_only = '//';
+		}
+		if (preg_match($base_only, $url)) {
+			return rtrim(self::$base_url, '/') . '/' . ltrim($url, '/');
+		}
+
+		// Other URLs
+		return $path . $url;
+	}
+
+
+	/**
+	 * replace the path of image src, link href and a href.
+	 * @see rewrite_url for more information about how paths are replaced.
 	 *
 	 * @param string $html
 	 * @return string html sostituito
@@ -649,46 +692,34 @@ class RainTPL{
 		if( self::$path_replace ){
 
 			$tpl_dir = self::$base_url . self::$tpl_dir . $tpl_basedir;
-			
+
 			// reduce the path
 			$path = $this->reduce_path($tpl_dir);
 
-			$exp = $sub = array();
+			$exp = array();
+			$exp[] = '/<(link|a)(.*?)(href)="(.*?)"/i';
+			$exp[] = '/<(img|script|input)(.*?)(src)="(.*?)"/i';
+			$exp[] = '/<(form)(.*?)(action)="(.*?)"/i';
 
-			if( in_array( "img", self::$path_replace_list ) ){
-				$exp = array( '/<img(.*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<img(.*?)src=(?:")([^"]+?)#(?:")/i', '/<img(.*?)src="(.*?)"/', '/<img(.*?)src=(?:\@)([^"]+?)(?:\@)/i' );
-				$sub = array( '<img$1src=@$2://$3@', '<img$1src=@$2@', '<img$1src="' . $path . '$2"', '<img$1src="$2"' );
-			}
+			return preg_replace_callback(
+				$exp,
+				function ($matches) use ($path) {
+					$tag  = $matches[1];
+					$_    = $matches[2];
+					$attr = $matches[3];
+					$url  = $matches[4];
+					$new_url = $this->rewrite_url($url, $tag, $path);
 
-			if( in_array( "script", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<script(.*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<script(.*?)src=(?:")([^"]+?)#(?:")/i', '/<script(.*?)src="(.*?)"/', '/<script(.*?)src=(?:\@)([^"]+?)(?:\@)/i' ) );
-				$sub = array_merge( $sub , array( '<script$1src=@$2://$3@', '<script$1src=@$2@', '<script$1src="' . $path . '$2"', '<script$1src="$2"' ) );
-			}
-
-			if( in_array( "link", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<link(.*?)href=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<link(.*?)href=(?:")([^"]+?)#(?:")/i', '/<link(.*?)href="(.*?)"/', '/<link(.*?)href=(?:\@)([^"]+?)(?:\@)/i' ) );
-				$sub = array_merge( $sub , array( '<link$1href=@$2://$3@', '<link$1href=@$2@' , '<link$1href="' . $path . '$2"', '<link$1href="$2"' ) );
-			}
-
-			if( in_array( "a", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<a(.*?)href=(?:")(http\:\/\/|https\:\/\/|javascript:|mailto:)([^"]+?)(?:")/i', '/<a(.*?)href="(.*?)"/', '/<a(.*?)href=(?:\@)([^"]+?)(?:\@)/i'  ) );
-				$sub = array_merge( $sub , array( '<a$1href=@$2$3@', '<a$1href="' . self::$base_url . '$2"', '<a$1href="$2"' ) );
-			}
-
-			if( in_array( "input", self::$path_replace_list ) ){
-				$exp = array_merge( $exp , array( '/<input(.*?)src=(?:")(http|https)\:\/\/([^"]+?)(?:")/i', '/<input(.*?)src=(?:")([^"]+?)#(?:")/i', '/<input(.*?)src="(.*?)"/', '/<input(.*?)src=(?:\@)([^"]+?)(?:\@)/i' ) );
-				$sub = array_merge( $sub , array( '<input$1src=@$2://$3@', '<input$1src=@$2@', '<input$1src="' . $path . '$2"', '<input$1src="$2"' ) );
-			}
-
-			return preg_replace( $exp, $sub, $html );
+					return "<$tag$_$attr=\"$new_url\"";
+				},
+				$html
+			);
 
 		}
 		else
 			return $html;
 
 	}
-
-
 
 
 
