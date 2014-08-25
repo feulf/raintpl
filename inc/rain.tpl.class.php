@@ -614,8 +614,9 @@ class RainTPL{
 		}
 		return $compiled_code;
 	}
-	
-	
+
+
+
 	/**
 	 * Reduce a path, eg. www/library/../filepath//file => www/filepath/file
 	 * @param type $path
@@ -648,36 +649,57 @@ class RainTPL{
 	 * @param string $path Path to prepend to relative URLs.
 	 * @return string rewritten url
 	 */
-	protected function rewrite_url($url, $tag, $path) {
+	protected function rewrite_url( $url, $tag, $path ) {
 		// If we don't have to rewrite for this tag, do nothing.
-		if(!in_array($tag, self::$path_replace_list)) {
+		if( !in_array( $tag, self::$path_replace_list ) ) {
 			return $url;
 		}
 
 		// Make protocol list. It is a little bit different for <a>.
 		$protocol = 'http|https|ftp|file|apt|magnet';
-		if ($tag == 'a') {
+		if ( $tag == 'a' ) {
 			$protocol .= '|mailto|javascript';
 		}
 
 		// Regex for URLs that should not change (except the leading #)
 		$no_change = "/(^($protocol)\:)|(#$)/i";
-		if (preg_match($no_change, $url)) {
-			return rtrim($url, '#');
+		if ( preg_match( $no_change, $url ) ) {
+			return rtrim( $url, '#' );
 		}
 
 		// Regex for URLs that need only base url (and not template dir)
 		$base_only = '/^\//';
-		if ($tag == 'a' or $tag == 'form') {
+		if ( $tag == 'a' or $tag == 'form' ) {
 			$base_only = '//';
 		}
-		if (preg_match($base_only, $url)) {
-			return rtrim(self::$base_url, '/') . '/' . ltrim($url, '/');
+		if ( preg_match( $base_only, $url ) ) {
+			return rtrim( self::$base_url, '/' ) . '/' . ltrim( $url, '/' );
 		}
 
 		// Other URLs
 		return $path . $url;
 	}
+
+
+
+	/**
+	 * replace one single path corresponding to a given match in the `path_replace` regex.
+	 * This function has no reason to be used anywhere but in `path_replace`.
+	 * @see path_replace
+	 *
+	 * @param array $matches
+	 * @return replacement string
+	 */
+	protected function single_path_replace ( $matches ){
+		$tag  = $matches[1];
+		$_    = $matches[2];
+		$attr = $matches[3];
+		$url  = $matches[4];
+		$new_url = $this->rewrite_url( $url, $tag, $this->path );
+
+		return "<$tag$_$attr=\"$new_url\"";
+	}
+
 
 
 	/**
@@ -693,27 +715,15 @@ class RainTPL{
 
 			$tpl_dir = self::$base_url . self::$tpl_dir . $tpl_basedir;
 
-			// reduce the path
-			$path = $this->reduce_path($tpl_dir);
+			// Prepare reduced path not to compute it for each link
+			$this->path = $this->reduce_path( $tpl_dir );
 
 			$exp = array();
 			$exp[] = '/<(link|a)(.*?)(href)="(.*?)"/i';
 			$exp[] = '/<(img|script|input)(.*?)(src)="(.*?)"/i';
 			$exp[] = '/<(form)(.*?)(action)="(.*?)"/i';
 
-			return preg_replace_callback(
-				$exp,
-				function ($matches) use ($path) {
-					$tag  = $matches[1];
-					$_    = $matches[2];
-					$attr = $matches[3];
-					$url  = $matches[4];
-					$new_url = $this->rewrite_url($url, $tag, $path);
-
-					return "<$tag$_$attr=\"$new_url\"";
-				},
-				$html
-			);
+			return preg_replace_callback( $exp, 'self::single_path_replace', $html );
 
 		}
 		else
@@ -751,7 +761,7 @@ class RainTPL{
 			$this->function_check( $tag );
 
 			$extra_var = $this->var_replace( $extra_var, null, null, null, null, $loop_level );
-            
+
 
 			// check if there's an operator = in the variable tags, if there's this is an initialization so it will not output any value
 			$is_init_variable = preg_match( "/^(\s*?)\=[^=](.*?)$/", $extra_var );
