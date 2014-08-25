@@ -719,9 +719,15 @@ class RainTPL{
 			$this->path = $this->reduce_path( $tpl_dir );
 
 			$exp = array();
-			$exp[] = '/<(link|a)(.*?)(href)="(.*?)"/i';
-			$exp[] = '/<(img|script|input)(.*?)(src)="(.*?)"/i';
-			$exp[] = '/<(form)(.*?)(action)="(.*?)"/i';
+
+			$tags = array_intersect( array( "link", "a" ), self::$path_replace_list );
+			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(href)="(.*?)"/i';
+
+			$tags = array_intersect( array( "img", "script", "input" ), self::$path_replace_list );
+			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(src)="(.*?)"/i';
+
+			$tags = array_intersect( array( "form" ), self::$path_replace_list );
+			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(action)="(.*?)"/i';
 
 			return preg_replace_callback( $exp, 'self::single_path_replace', $html );
 
