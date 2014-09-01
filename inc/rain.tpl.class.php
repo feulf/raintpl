@@ -360,11 +360,11 @@ class RainTPL{
 
 		$tag_regexp = "/" . join( "|", $tag_regexp ) . "/";
 
-		//split the code with the tags regexp
-		$template_code = preg_split ( $tag_regexp, $template_code, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
-
 		//path replace (src of img, background and href of link)
 		$template_code = $this->path_replace( $template_code, $tpl_basedir );
+
+		//split the code with the tags regexp
+		$template_code = preg_split ( $tag_regexp, $template_code, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
 
 		//compile the code
 		$compiled_code = $this->compileCode( $template_code );
@@ -718,16 +718,18 @@ class RainTPL{
 			// Prepare reduced path not to compute it for each link
 			$this->path = $this->reduce_path( $tpl_dir );
 
+			$url = '(?:(?:\\{.*?\\})?[^{}]*?)*?'; // allow " inside {} for cases in which url contains {function="foo()"}
+
 			$exp = array();
 
 			$tags = array_intersect( array( "link", "a" ), self::$path_replace_list );
-			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(href)="(.*?)"/i';
+			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(href)="(' . $url . ')"/i';
 
 			$tags = array_intersect( array( "img", "script", "input" ), self::$path_replace_list );
-			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(src)="(.*?)"/i';
+			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(src)="(' . $url . ')"/i';
 
 			$tags = array_intersect( array( "form" ), self::$path_replace_list );
-			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(action)="(.*?)"/i';
+			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(action)="(' . $url . ')"/i';
 
 			return preg_replace_callback( $exp, 'self::single_path_replace', $html );
 
