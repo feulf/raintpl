@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RainTPL - easy php template engine</title>
+    <link id="page_favicon" href="/raintpl/assets/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="/raintpl/assets/css/style.css" type="text/css"/>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script>var time;function openpopup(o){var date=new Date();time=date.getTime();var m=o.title;var ma=m.split(' - ');$('#message').html('<b>'+ma[0]+'</b><br/>'+ma[1]+'<br/>').fadeIn('fast');$('#message').css('left',o.x-50);$('#message').css('top',o.y-50);}
+    function closepopup(){setTimeout("_closepopup()",500)}
+    function _closepopup(){var date=new Date()
+        if(date.getTime()-time>500)
+            $('#message').fadeOut("slow");}</script>
+    <script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-5639487-4']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();</script>
+</head>
+<body>
+
+<div id="header_msg"><div style="float:left;">The <b>easy</b> and <a href="/raintpl/PHP-Template-Engines-Speed-Test/">fast</a> template engine for <span>PHP</span>. &nbsp; <a href="/raintpl/FAQ/"><b>Rain<span>.TPL</span></b></a> makes application easier to create & enables designers/developers to work better together.</div><div style="float:right;">Try <a href="/raintplhttp://www.raincms.com/" target="_blank">Rain <span>CMS</span></a> and <a href="/raintplhttp://www.rainframework.com/" target="_blank">Rain <span>Framework</span></a></div></div>
+
+<div id="header">
+    <div id="login"><a target="_blank" href="/raintplhttps://github.com/rainphp">Follow on Github</a></div>
+    <div id="search"><div><form method="get" name="search" action="/search/"><input type="text" name="search"/></form></div></div>
+    <div id="logo"><a href="/raintpl/"><img src="/raintpl/assets/img/logo.jpg" title="raintpl"></a><br>&nbsp;easy PHP template engine</div>
+</div>
+
+<div id="nav">
+    <a href="/raintpl/" class="selected">Home</a> &nbsp
+    <a href="/raintpl/Download/">Download</a> &nbsp
+    <a href="/raintpl/Quick-Start/">Quick Start</a> &nbsp
+    <a href="/raintpl/Documentation/">Documentation</a> &nbsp
+    <a href="/raintpl/PHP-Template-Engines-Speed-Test/">Speed Test</a> &nbsp
+    <a href="/raintpl/Forum/">Forum</a> &nbsp
+    <a href="/raintpl/Credits/">Credits</a> &nbsp
+</div>
+
+
+<!-- content -->
+
+<div id="section">
+    <div id="path">&nbsp;</div>
+    <div class="content">
+        <h1>Quick Start</h1>
+        <div class="text"><h2>RainTPL</h2>
+            <p>RainTPL is an open source PHP template engine, it load precompiled PHP templates:</p>
+            <ul>
+                <li><strong>Easy</strong>, 8 Tags, 3 Methods, 1 Class in a single File</li>
+                <li><strong>Fast</strong>, load precompiled templates</li>
+                <li><strong>Useful</strong>, divide logic by design</li>
+                <li><strong>WYSIWYG</strong>, design HTML with img/css with relative paths, Rain will substitute with the correct paths</li>
+            </ul>
+            <h2><br/>Installation</h2>
+            <p>Downloadhow RainTPL copy, the file <i>rain.tpl.class.php</i> in your project include directory <i>inc/</i>, create a templates directory <i>tpl/</i>, and a cache directory <i>tmp/</i>.</p>
+            <h2>Include and configure</h2>
+            <div class="php"><span style="color: blue;">include</span><span style="color: #339933;"> "inc/rain.tpl.class.php"</span>; <span style="color: #808080;">//include Rain TPL</span><span style="color: #808080;"><br/></span>raintpl::$tpl_dir = <span style="color: #339933;">"tpl/"</span>; <span style="color: #808080;">// template directory</span><br/>raintpl::$cache_dir = <span style="color: #339933;">"tmp/"</span>;  <span style="color: #808080;">// cache directory</span></div>
+            <p>&nbsp;</p>
+            <h2>Tags</h2>
+            <p>Here the tags you need</p>
+            <ul>
+                <li><a href="#variable_name">{$variable_name}</a></li>
+                <li><a href="#constant">{#constant#}</a></li>
+                <li><a href="#if">{if="condition"}</a></li>
+                <li><a href="#loop">{loop="array"}</a></li>
+                <li><a href="#include">{include="template"}</a></li>
+                <li><a href="#func">{function="myFunc"}</a></li>
+                <li><a href="#noparse">{noparse}</a></li>
+                <li><a href="#comment">{* comment *}</a></li>
+            </ul>
+            <p>&nbsp;</p>
+            <p><a name="variable_name"></a></p>
+            <h3>{$Variable_name}</h3>
+            <p>Variables are the dynamic contents of the templates, you can assign them with assign() method. Variables are case_sensitive.<strong><br/></strong></p>
+            <div class="template">My age is {$age}&nbsp; // 30<span class="variable"></span></div>
+            <p><strong><br/></strong>You can do simple operations such as <i>+ - * / %</i> with numbers, string and other variables and also use = for assign a value to a variable<strong><br/></strong></p>
+            <div class="template">{$year=30}<br/>My age is {$age+$year}&nbsp; // 60</div>
+            <p><br/>You can use functions with variables<strong><br/></strong></p>
+            <div class="template">My name is {$name|substr:0,3}&nbsp; // Rai</div>
+            <p><strong><br/></strong>Use {$GLOBALS} to access all globals variable as _SESSION, _GET, _POST, _SERVER.<br/><strong><br/></strong></p>
+            <p><a name="constant"></a></p>
+            <h3>{#constant#}</h3>
+            <p>You can constants with this syntax: {#constant#}</p>
+            <p><a name="if"></a></p>
+            <h3>{if="condition"}{/if}</h3>
+            <p>Is the equivalent of php if. You can use variable and php into the condition.<strong><br/></strong></p>
+            <div class="template"><span class="comment"></span><span class="tag"></span><span class="tag">{if condition=</span><span class="string">"</span><span class="variable">$age</span> <span class="string">&lt; 20"</span><span class="tag">}</span><br/>&nbsp;&nbsp;&nbsp; less than 20 years<span class="tag"><br/>{elseif             condition=</span><span class="string">"</span><span class="variable">$age</span> <span class="string">&lt; 30"</span><span class="tag">}<br/>&nbsp;&nbsp;&nbsp;&nbsp; </span>less than 30 years<br/><span class="tag">{else}</span><br/>&nbsp;&nbsp;&nbsp;&nbsp; 30 or more<br/><span class="tag">{/if}</span></div>
+            <p>&nbsp;</p>
+            <p><a name="loop"></a></p>
+            <h3>{loop="array"}{/loop}</h3>
+            <p>This tag allow you to loop an array, it's useful to print a list of articles, news.<strong><br/></strong></p>
+            <div class="template"><span class="comment"></span><span class="tag">{loop=</span><span class="string">"user"</span><span class="tag">}</span><br/>&nbsp;<span class="variable">{$value.user_id} - {$value.name} - {$value.phone}</span><br/> <span class="tag">{/loop}</span></div>
+            <p><br/>Betweein {<strong>loop</strong>} and {/<strong>loop</strong>}  you can use special variables:</p>
+            <ul>
+                <li>{$key}, key of the array element.</li>
+                <li>{$value},  value of the array.</li>
+                <li>0, loop counter, it starts from 0. If you want starts from 1: {$counter+1}. If you do {$counter%2+1} each cycle will return 1 and 2.</li>
+            </ul>
+            <p>&nbsp;</p>
+            <p><a name="include"></a></p>
+            <h3>{include="template"}</h3>
+            <p>Use this tag for include external templates. Useful for include  header and footer if they are the same in all page of your website.<strong><br/></strong></p>
+            <div class="template"><span class="comment"></span><span class="tag">{include=</span><span class="string">"layout/header"</span><span class="tag">}</span></div>
+            <p><br/>You can also use use static cache with include tag. Check the <a href="http://www.raintpl.com/Documentation/">documentation</a>.</p>
+            <p><a name="func"></a></p>
+            <h3>{function="myFunc"}</h3>
+            <p>Call php functions and print the result.<strong><br/></strong></p>
+            <div class="template"><span class="comment"></span><span class="tag">{function=</span><span class="string">"pagination($selected_page)"</span><span class="tag">}<br/></span><span class="tag"></span></div>
+            <p>&nbsp;</p>
+            <p><a name="comment"></a></p>
+            <h3>{* comment *}</h3>
+            <p>All between <tt>{*</tt>&nbsp;and <tt>*}</tt> is deleted in the compiled file. Use this tag to comment your templates.<strong><br/></strong></p>
+            <div class="template">{* 'sup dude? I'm a comment *}</div>
+            <p>&nbsp;</p>
+            <p><a name="noparse"></a></p>
+            <h3><br/>{noparse}{/noparse}</h3>
+            <p>All the code between<strong> {noparse} {/noparse}</strong> it won't be parsed<strong><br/></strong></p>
+            <div class="template">Hey <span class="tag">{noparse}</span>how are you <span class="tag">{$name}{/noparse}</span>?</div>
+            <p><br/><strong>Output:</strong></p>
+            <div class="output">Hey how are you {$name}?</div>
+            <h3></h3>
+            <h2>WYSIWYG - Path replace</h2>
+            <p>This cool feature allows designers to create templates as regular HTML with images and styles with relative paths, RainTPL replaces automatically these paths with the correct server paths.<br/><br/>Absolute paths and paths ending with # will be not changed.<strong><br/></strong></p>
+            <div class="template">&lt;link href="style.css" type="text/css" rel="stylesheet"&gt;<br/> &lt;img src="img/logo.gif"&gt;</div>
+            <p><br/><strong>Output html:</strong></p>
+            <div class="output">&lt;link href="tpl/style.css" type="text/css" rel="stylesheet"&gt;<br/> <span class="comment"></span>&lt;img src="tpl/img/logo.gif"&gt;</div>
+            <p><br/>Note: if you set raintpl::$base_url, RainTPL will replace the path with raintpl::$base_url.</p>
+            <h3></h3>
+            <h2>Assign and draw</h2>
+            <p>This is what you've to write in your script to assign variables and draw the template.</p>
+            <div class="php">$tpl = <span style="color: blue;">new</span><span style="color: #339933;"> </span>raintpl(); <span style="color: #808080;">//include Rain TPL</span><span style="color: #808080;"></span><br/>$tpl-&gt;assign( <span style="color: #339933;">"age"</span>,<span style="color: #339933;"> </span><span style="color: #339933;">"30"</span> ); <span style="color: #808080;">// assign variable</span><span style="color: #808080;"></span><br/>$tpl-&gt;assign( array( <span style="color: #339933;">"age"</span> =&gt;<span style="color: #339933;"> </span><span style="color: #339933;">"30"</span>,<span style="color: #339933;"> </span><span style="color: #339933;">"name"</span> =&gt;<span style="color: #339933;"> </span><span style="color: #339933;">"Rain"</span><span style="color: #339933;"> </span>) <span style="color: #339933;"></span>); <span style="color: #808080;"></span><span style="color: #808080;">// associative array</span><span style="color: #808080;"></span><br/>$tpl-&gt;assign( <span style="color: #339933;">"user"</span>, $user<span style="color: #339933;"> </span>); <span style="color: #808080;">// assign an array</span><span style="color: #808080;"></span><br/>$tpl-&gt;draw( <span style="color: #339933;">"mytemplate" </span>); <span style="color: #808080;">// draw the template</span><span style="color: #808080;"></span></div>
+            <p>Is avalaible also a Cache method which can improve drastically the load speed of your page. Check the <a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Methods/Cache/">documentation</a>.</p></div>
+    </div>
+</div>
+
+<!-- /content -->
+
+<div id="footer">
+    <div class="left"><a href="/raintpl/" class="selected">Home</a><a href="/raintpl/Download.html">Download</a><a href="/raintpl/Quick-Start/">Quick Start</a><a href="/raintpl/Documentation/">Documentation</a><a href="/raintpl/PHP-Template-Engines-Speed-Test/">Speed Test</a><a href="/raintpl/Forum/">Forum</a><a href="/raintpl/Credits/">Credits</a>
+        <br><br>
+        <a href="/raintpl/FAQ.html">FAQ</a><a href="/raintpl/News.html">News</a><a href="/raintpl/Links.html">Links</a>
+    </div>
+    <div class="right">Copyright <a href="/raintplhttp://federicoulfo.it">Federico Ulfo</a></div>
+</div>
+
+</body>
+</html>
