@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RainTPL - easy php template engine</title>
+    <link id="page_favicon" href="/raintpl/assets/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="/raintpl/assets/css/style.css" type="text/css"/>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script>var time;function openpopup(o){var date=new Date();time=date.getTime();var m=o.title;var ma=m.split(' - ');$('#message').html('<b>'+ma[0]+'</b><br/>'+ma[1]+'<br/>').fadeIn('fast');$('#message').css('left',o.x-50);$('#message').css('top',o.y-50);}
+    function closepopup(){setTimeout("_closepopup()",500)}
+    function _closepopup(){var date=new Date()
+        if(date.getTime()-time>500)
+            $('#message').fadeOut("slow");}</script>
+    <script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-5639487-4']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();</script>
+</head>
+<body>
+
+<div id="header_msg"><div style="float:left;">The <b>easy</b> and <a href="/raintpl/PHP-Template-Engines-Speed-Test/">fast</a> template engine for <span>PHP</span>. &nbsp; <a href="/raintpl/FAQ/"><b>Rain<span>.TPL</span></b></a> makes application easier to create & enables designers/developers to work better together.</div><div style="float:right;">Try <a href="/raintplhttp://www.raincms.com/" target="_blank">Rain <span>CMS</span></a> and <a href="/raintplhttp://www.rainframework.com/" target="_blank">Rain <span>Framework</span></a></div></div>
+
+<div id="header">
+    <div id="login"><a target="_blank" href="https://github.com/rainphp">Follow on Github</a> | <a target="_blank" href="https://twitter.com/feulf">Follow on Twitter</a></div>
+    <div id="logo"><a href="/raintpl/"><img src="/raintpl/assets/img/logo.jpg" title="raintpl"></a><br>&nbsp;easy PHP template engine</div>
+</div>
+
+<div id="nav">
+    <a href="/raintpl/" class="selected">Home</a> &nbsp
+    <a href="/raintpl/Download.html">Download</a> &nbsp
+    <a href="/raintpl/Quickstart.html">Quick Start</a> &nbsp
+    <a href="https://github.com/rainphp/raintpl/wiki">Documentation</a> &nbsp
+    <a href="/raintpl/Forum.html">Forum</a> &nbsp
+    <a href="/raintpl/Credits.html">Credits</a> &nbsp
+</div>
+
+
+
+<!-- content -->
+
+<div id="section">
+    <div class="content">
+        <h1>News</h1>
+        <div class="text"></div>
+    </div>
+    <div class="content_list">
+
+        <div class="voice">
+            <div class="date">20 July 2013</div>
+
+            <h2>A few (nice) words on the Rain Projects</h2>
+            <div class="text">Hi everyone,&nbsp;it's been a really hot summer in New York city, one of those insanely humid, temperature arrived to over 100 F (37 C) and humidity to over 70%, but this won't stop us from coding, and...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">17 January 2013</div>
+
+            <h2>RainTPL 3 final version online on Packagist</h2>
+            <div class="text">RainTPL 3 is been officially released and is been published on Packagist, so you'll be able to download it from github or install in your application with Composer (the suggested way).&nbsp;We also...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">24 December 2012</div>
+
+            <h2>RainTPL on Composer</h2>
+            <div class="text"></div>
+
+        </div>
+
+        <div class="voice">
+            <div class="date">20 September 2012</div>
+
+            <h2>Try.github the most amazing way to learn Github</h2>
+            <div class="text">That's the most amazing way to learn git and github: http://try.github.com/ Try it if you want to learn git to contribute to the RainTPL project or even to create your own repository. And please...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">12 September 2012</div>
+
+            <h2>RainTPL 3 progress</h2>
+            <div class="text">Slowly RainTPL 3 is moving forward thanks to the sinergy of our awesome community. In the meaning time we are also working on the RainCMS and preparing a wiki module to create the new...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">20 July 2012</div>
+
+            <h2>Rain on Cloud Server</h2>
+            <div class="text">You may notice that this website is going way faster, well we moved all Rain project websites on the cloud! Now we are on Cloud Server on Rackspace, in the next few weeks we'll also upgrade the...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">13 July 2012</div>
+
+            <h2><a href="http://www.raintpl.com/News/2012/07/13/Rain-CMS-is-online!/">Rain CMS is online!</a></h2>
+            <div class="text">The first drop
+                Lot of years passed since I started to work on Rain CMS, and months since I announced that Rain was going open source... and the time has finally come! This is the first Alpha...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">23 June 2012</div>
+
+            <h2>Rain CMS is under MIT license</h2>
+            <div class="text">After years of coding,&nbsp;years of thinking, failures&nbsp;and small successes, after some recent&nbsp;suggestions of some big NY angel investor to do not go open source...We decided to do something good for...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">03 May 2012</div>
+
+            <h2>RainTPL 3 Beta ready on Github</h2>
+            <div class="text">Here is the link&nbsp;github.com/rainphp/raintpl3!Here is the features implemented in the Beta version:
+
+                Namespace, we chosed to use the psr-0 naming convention (if you see any wrong naming, please...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">29 February 2012</div>
+
+            <h2>PHPcomparison updated</h2>
+            <div class="text">We updated the version of the template engines in phpcomparison.net, now it test the latest version of RainTPL and the latest version of other template engines.We are happy to say that, yet one...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">28 December 2011</div>
+
+            <h2>RainTPL 3 Alpha</h2>
+            <div class="text">We are happy to announce that RainTpl 3 Alpha is finally on github:https://github.com/rainphp/raintpl3
+                Easy, light and fast as ever, RainTPL 3 Alpha is back-compatible with RainTPL 2, the list of...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">31 July 2011</div>
+
+            <h2>RainTPL 2.6.5 bug fix for 2.6.4</h2>
+            <div class="text">The version 2.6.4 has been tested it and used it in many projects. Version 2.6.5 just fix 2 minor bugs of the previous version, here are the changes:
+
+                <b>Bug fix: variable assignment ereditable in...</b></div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">01 May 2011</div>
+
+            <h2>RainTPL 2.6.4 released</h2>
+            <div class="text">RainTPL 2.6.4 version improve all the features introduced in RainTPL 2.6, fix a few bugs and it's even faster:Changes:
+
+                <b>Output Buffer</b>, removed when unnecessary the output buffer. This change speed...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">08 April 2011</div>
+
+            <h2>Fresh Forums for our community</h2>
+            <div class="text">As the community grows we decided to put a forum into raintpl and rainframework website, to let all of you partecipating and share experiences. You are all invited to join&nbsp; the Rain Framework...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">10 March 2011</div>
+
+            <h2>RainTPL 2.6.2 released</h2>
+            <div class="text">RainTPL 2.6.2 confirm few improvements of the version 2.6 beta.Changes:
+                <b>Sandbox</b>, introduced in 2.6 beta, the sandbox is now part of the RainTPL. The sandbox is implemented with a $black_list that...
+            </div>
+        </div>
+
+        <div class="voice">
+            <div class="date">17 February 2011</div>
+            <h2>Integrating Rain TPL into Zend</h2>
+            <div class="text">Using HTML templates instead of PHP templates has many advantages, the code is more readable, if you work in a team, designers will love you, and you'll have more time to focus on your PHP...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">10 February 2011</div>
+            <h2>PHP Template Engine comparison</h2>
+            <div class="text">The benchmark now test also the memory used by the template engine:http://www.raintpl.com/PHP-Template-Engines-Speed-Test/</div>
+
+        </div>
+
+        <div class="voice">
+            <div class="date">08 February 2011</div>
+            <h2>RainTPL 2.5.5 - PHP Views</a></h2>
+            <div class="text">Since the increasing use of MVC Framework, a new trend has surfaced, preference to Views over Templates, so many developers are using PHP templates instead of HTML templates. We've decided to...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">27 January 2011</div>
+            <h2>RainTPL 2.5.1 - small fix</h2>
+            <div class="text">In version 2.4.9beta, we introduced the cache. The code changing made a bug that didn't allow to call draw method more than once on different templates, we just fixed this bug, so now is...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">24 January 2011</div>
+            <h2>RainTPL published on GitHub</h2>
+            <div class="text">Thanks to Gon&ccedil;alo Margalho, we published RainTPL on GitHub at link: https://github.com/rainphp/raintpl</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">22 January 2011</div>
+            <h2>RainTPL 2.5 released</h2>
+            <div class="text">In about a month RainTpl evolved from version 2 to version 2.5, considering first version evolved slowly in about 4 years to version 2, this is a big jump!So let's see the <b>Rain TPL 2.5</b>...</b></div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">15 January 2011</div>
+            <h2>Website changes</h2>
+            <div class="text">Added the possibility to choose the new white theme or the old acid theme, and removed temporarly the Forum, at the moment for any request or feedback please write on the raintpl google groups,...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">15 January 2011</div>
+            <h2>RainTPL 2.4.9 beta</h2>
+            <div class="text">Mantain Rain easy and fast, but more complete is our challenge! So here we are with the new version (in beta), that implements new features:
+                <b>static cache</b>, the output of the template can be cached...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">03 January 2011</div>
+            <h2>PHP Template Engines Speed Test</h2>
+            <div class="text">Updated the speed test with more template engines. Click here to see the Speed Test.</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">02 January 2011</div>
+            <h2>RainTPL 2.2</h2>
+            <div class="text">
+                new tag {function="function_name"}.
+                source code optimized, improved the speed.
+                TPL_EXT constant removed. RainTPL loads only html template.
+                TPL_CACHE_ENABLED constant removed. Cache is always...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">23 December 2010</div>
+            <h2>LGPL License</h2>
+            <div class="text">RainTPL is now distributed under the Lesser General Public License, which allows the  inclusion in others projects also with different license.</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">13 December 2010</div>
+            <h2>RainTPL 2</h2>
+            <div class="text">RainTPL, get easier and lighter.The new version implements:
+                7 tags to design templates.
+                2 methods, assign() and draw() to load templates.
+                1 file/class, the code was optimized to make it lighter...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">21 August 2010</div>
+            <h2>Rain Framework 1.0</h2>
+            <div class="text">RainTPL is now part of a bigger open: Rain Framework, the easy framework php open source.Rain  Framework is a collection of usefull functions and classes to simplify  the creation of web project...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">18 August 2010</div>
+            <h2>RainTPL 1.9</h2>
+            <div class="text">Corrected bug in {include} tag of the 1.9 beta version, Important updates:
+
+                Added static property<i> raintpl::$base_dir</i>, which set the base directory of all image src attribute,&nbsp; background attribute...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">23 June 2010</div>
+            <h2>RainTPL 1.9 beta</h2>
+            <div class="text">After many email requests we decided to anticipate the update of the new version, to solve some problems of the older version.This is a beta version so we'll wait your feedback to make it...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">14 June 2010</div>
+            <h2>Documentation in German</h2>
+            <div class="text">Documentation updated and translated in German.<i>Thanks to Christian Stefan for the translation</i>.</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">14 June 2010</div>
+            <h2>Website Updated</h2>
+            <div class="text">Restyled the graphics and the documentation to simplify more the navigation.<i>Thanks to Christian Stefan for graphics restyle and documentation.</i></div>
+
+        </div>
+
+        <div class="voice">
+            <div class="date">12 June 2010</div>
+            <h2>RainTPL 1.7.8</h2>
+            <div class="text">
+                When the template directory is not writeable, RainTPL load the default precompiled template<i> template_name.php</i> (before was<i> template_name_def.php</i>).
+                Fixed some minor bug in directory...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">28 December 2009</div>
+            <h2>RainTPL 1.7.6</h2>
+            <div class="text">
+                Fixed bug that caused wrong path replace when template had more images.
+            </div>
+
+        </div>
+
+        <div class="voice">
+            <div class="date">10 December 2009</div>
+            <h2>RainTPL 1.7.5</h2>
+            <div class="text">
+                Constant DEBUG changed name in RAINTPL_CHACHE_ENABLED. Set  true as default to load cached template and improved speed.
+
+                <b>Important:</b> filename are now lowercase: <i>rain.tpl.class.php, ...</i></div>
+
+        </div>
+
+        <div class="voice">
+            <div class="date">01 September 2009</div>
+
+            <h2><a href="http://www.raintpl.com/News/2009/09/01/RainTPL-1.7/">RainTPL 1.7</a></h2>
+            <div class="text">
+                Is now possible to organize templates in  subdirectory, ex:TPL_DIR/TPL/news/news.html $tpl = new RainTpl( 'TPL_DIR/TPL/' ); $tpl-&gt;draw( 'news/news' );
+                Can be create xml template.
+                $show_copyright...</div>
+
+
+        </div>
+
+        <div class="voice">
+            <div class="date">19 November 2008</div>
+            <h2>RainTPL 1.6 project on sourceforge.net</h2>
+            <div class="text">Released RainTPL version 1.6 online on sourceforge.net. Updates:
+                added constants:{#_CONST_NAME_#}
+                added global vars:{$GLOBALS}&nbsp; {$_GET}&nbsp; {$_POST}&nbsp; {$_COOKIES}&nbsp; {$_SESSION} e {$_SERVER}
+                if cannot...</div>
+        </div>
+
+        <div class="voice">
+            <div class="date">05 August 2007</div>
+            <h2>Memht use Raintpl</h2>
+            <div class="text"></div>
+
+        </div>
+
+        <div class="voice">
+            <div class="date">05 August 2007</div>
+            <h2>Benchmark added</h2>
+            <div class="text">Benchmark of the famouse PHP template engine: benchmark.   Thanks Juozas Salna for the benchmark script!</div>
+
+        </div>
+
+        <div class="voice">
+            <div class="date">08 July 2007</div>
+            <h2>RainTPL 1.0</h2>
+            <div class="text">Released the version 1.0 of Rain TPL. <b>Features</b>
+                <b>Fast</b>: load precompiled template.
+                <b>Easy</b>: 2 files, 7 tags and 3 methods for  design template.
+                <b>Useful</b>: split graphics by contents, manage  theme (ex:...</div>
+        </div>
+    </div>
+</div>
+
+<!-- /content -->
+
+<div id="footer">
+    <div class="left"><a href="/raintpl/" class="selected">Home</a><a href="/raintpl/Download.html">Download</a><a href="/raintpl/Quickstart.html">Quick Start</a><a href="https://github.com/rainphp/raintpl/wiki">Documentation</a><a href="/raintpl/PHP-Template-Engines-Speed-Test/">Speed Test</a><a href="/raintpl/Forum/">Forum</a><a href="/raintpl/Credits.html">Credits</a>
+        <br><br>
+        <a href="/raintpl/FAQ.html">FAQ</a><a href="/raintpl/News.html">News</a><a href="/raintpl/Links.html">Links</a>
+    </div>
+    <div class="right">Copyright RainTPL</div>
+</div>
+
+</body>
+</html>
