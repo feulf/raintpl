@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RainTPL - easy php template engine</title>
+    <link id="page_favicon" href="/raintpl/assets/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="/raintpl/assets/css/style.css" type="text/css"/>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script>var time;function openpopup(o){var date=new Date();time=date.getTime();var m=o.title;var ma=m.split(' - ');$('#message').html('<b>'+ma[0]+'</b><br/>'+ma[1]+'<br/>').fadeIn('fast');$('#message').css('left',o.x-50);$('#message').css('top',o.y-50);}
+    function closepopup(){setTimeout("_closepopup()",500)}
+    function _closepopup(){var date=new Date()
+        if(date.getTime()-time>500)
+            $('#message').fadeOut("slow");}</script>
+    <script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-5639487-4']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();</script>
+</head>
+<body>
+
+<div id="header_msg"><div style="float:left;">The <b>easy</b> and <a href="/raintpl/PHP-Template-Engines-Speed-Test/">fast</a> template engine for <span>PHP</span>. &nbsp; <a href="/raintpl/FAQ/"><b>Rain<span>.TPL</span></b></a> makes application easier to create & enables designers/developers to work better together.</div><div style="float:right;">Try <a href="/raintplhttp://www.raincms.com/" target="_blank">Rain <span>CMS</span></a> and <a href="/raintplhttp://www.rainframework.com/" target="_blank">Rain <span>Framework</span></a></div></div>
+
+<div id="header">
+    <div id="login"><a target="_blank" href="https://github.com/rainphp">Follow on Github</a> | <a target="_blank" href="https://twitter.com/feulf">Follow on Twitter</a></div>
+    <div id="logo"><a href="/raintpl/"><img src="/raintpl/assets/img/logo.jpg" title="raintpl"></a><br>&nbsp;easy PHP template engine</div>
+</div>
+
+<div id="nav">
+    <a href="/raintpl/" class="selected">Home</a> &nbsp
+    <a href="/raintpl/Download.html">Download</a> &nbsp
+    <a href="/raintpl/Quickstart.html">Quick Start</a> &nbsp
+    <a href="/raintpl/Documentation.html">Documentation</a> &nbsp
+    <a href="/raintpl/Forum.html">Forum</a> &nbsp
+    <a href="/raintpl/Credits.html">Credits</a> &nbsp
+</div>
+
+
+
+<!-- content -->
+
+<div id="section_documentation">
+    <div class="content documentation_content">
+        <h1>Documentation</h1>
+        <div class="text"><p>The documentation of Rain TPL is divided in <i>documentation for web designers</i> and <i>documentation for PHP developers</i>.<font color="#888888">&nbsp;&nbsp;<br/><br/><a target="_blank" href="https://github.com/rainphp/raintpl3/wiki/Documentation">Click here for the RainTPL 3 documentation</a></font></p></div>
+    </div>
+
+
+    <div class="documentation_list">
+
+        <br/>
+
+        <div class="doc_index">
+            <h2><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/">Documentation for web designers</a></h2>
+
+
+            <ul>
+
+                <li><b><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/Knowledge-Base/">Knowledge Base</a></b>
+
+                </li>
+
+                <li><b><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/">RainTPL Tags</a></b>
+
+                    <ul>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/__variable_/">{$variable}</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/__constant__/">{#constant#}</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/_if_ condition ___if_/">{if="condition"}{/if}</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/_loop_ array ___loop_/">{loop="array"}{/loop}</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/_include_ template _/">{include="template"}</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/_*-comment-*_/">{* comment *}</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/_noparse___noparse_/">{noparse}{/noparse}</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/RainTPL-Tags/__variable_modifiers_/">{$variable|modifiers}</a>
+
+                    </ul>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="doc_index">
+            <h2><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/">Documentation for PHP developers</a></h2>
+
+
+            <ul>
+
+                <li><b><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Requisites/">Requisites</a></b>
+
+                </li>
+
+                <li><b><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Installation/">Installation</a></b>
+
+                </li>
+
+                <li><b><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Methods/">Methods</a></b>
+
+                    <ul>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Methods/Assign/">Assign</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Methods/Draw/">Draw</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Methods/Cache/">Cache</a>
+
+                        <li><a href="http://www.raintpl.com/Documentation/Documentation-for-PHP-developers/Methods/Configure/">Configure</a>
+
+                    </ul>
+
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- /content -->
+
+<div id="footer">
+    <div class="left"><a href="/raintpl/" class="selected">Home</a><a href="/raintpl/Download.html">Download</a><a href="/raintpl/Quickstart.html">Quick Start</a><a href="/raintpl/Documentation/">Documentation</a><a href="/raintpl/PHP-Template-Engines-Speed-Test/">Speed Test</a><a href="/raintpl/Forum/">Forum</a><a href="/raintpl/Credits.html">Credits</a>
+        <br><br>
+        <a href="/raintpl/FAQ.html">FAQ</a><a href="/raintpl/News.html">News</a><a href="/raintpl/Links.html">Links</a>
+    </div>
+    <div class="right">Copyright RainTPL</div>
+</div>
+
+</body>
+</html>
