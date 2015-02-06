@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <title>RainTPL - easy php template engine</title>
-    <link id="page_favicon" href="http://www.raintpl.com/assets/favicon.ico" rel="icon" type="image/x-icon"/>
-    <link rel="stylesheet" href="http://www.raintpl.com/assets/css/style.css" type="text/css"/>
+    <link id="page_favicon" href="assets/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css"/>
 
     <script src="https://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
     <script>var time;function openpopup(o){var date=new Date();time=date.getTime();var m=o.title;var ma=m.split(' - ');$('#message').html('<b>'+ma[0]+'</b><br/>'+ma[1]+'<br/>').fadeIn('fast');$('#message').css('left',o.x-50);$('#message').css('top',o.y-50);}
@@ -17,15 +17,15 @@
 
 <div id="header">
     <div id="login"><a target="_blank" href="https://github.com/rainphp">Follow on Github</a> | <a target="_blank" href="https://twitter.com/feulf">Follow on Twitter</a></div>
-    <div id="logo"><a href="http://www.raintpl.com/"><img src="http://www.raintpl.com/assets/img/logo.jpg" title="raintpl"></a><br>&nbsp;easy PHP template engine</div>
+    <div id="logo"><a href="/"><img src="assets/img/logo.jpg" title="raintpl"></a><br>&nbsp;easy PHP template engine</div>
 </div>
 
 <div id="nav">
-    <a href="http://www.raintpl.com/">Home</a> &nbsp
-    <a href="http://www.raintpl.com/Download.html">Download</a> &nbsp
-    <a href="http://www.raintpl.com/Documentation.html">Documentation</a> &nbsp
-    <a href="http://www.raintpl.com/Forum.html">Forum</a> &nbsp
-    <a href="http://www.raintpl.com/Credits.html">Credits</a> &nbsp
+    <a href="/">Home</a> &nbsp
+    <a href="Download.html">Download</a> &nbsp
+    <a href="Documentation.html">Documentation</a> &nbsp
+    <a href="Forum.html">Forum</a> &nbsp
+    <a href="Credits.html">Credits</a> &nbsp
 </div>
 
 
@@ -36,7 +36,7 @@
     <div class="content">
         <h1>FAQ</h1>
         <div class="text"><h2><br/>What is a template engine?</h2>
-            <p>A template engine is a script that loads templates and draws the graphics of your application. The purpose of the template engine is to separate the logic from the presentation, so developers and designers can work better together, because developers can focus on the PHP and designers can work on the HTML.<br/><br/> <span data-li-comment-text="Sure Manick,  a template engine is a script that loads templates and draws the graphics of your application. The purpose of the template engine is to separate the logic from the presentation, so developers and designers can work better together, because developers can focus on the PHP and designers can work on the HTML.  When we talk about PHP, usually it's a library that loads HTML template, and here a simple example of how they works:  my_template.html &lt;div&gt;Hello my name is {$name}&lt;/div&gt;  my_script.php $t=new tpl;  $t-&gt;assign(&quot;name&quot;, // get the name from a database for example //  ); $t-&gt;draw( &quot;my_template&quot; ); // draw the template  So this snippet will draw for example  &quot;Hello my name is Rain&quot;   source = [http://www.raintpl.com/FAQ/ ]" class="comment-body">here a simple example of how a template engine works:</span><br/><br/>my_template.html</p>
+            <p>A template engine is a script that loads templates and draws the graphics of your application. The purpose of the template engine is to separate the logic from the presentation, so developers and designers can work better together, because developers can focus on the PHP and designers can work on the HTML.<br/><br/> <span data-li-comment-text="Sure Manick,  a template engine is a script that loads templates and draws the graphics of your application. The purpose of the template engine is to separate the logic from the presentation, so developers and designers can work better together, because developers can focus on the PHP and designers can work on the HTML.  When we talk about PHP, usually it's a library that loads HTML template, and here a simple example of how they works:  my_template.html &lt;div&gt;Hello my name is {$name}&lt;/div&gt;  my_script.php $t=new tpl;  $t-&gt;assign(&quot;name&quot;, // get the name from a database for example //  ); $t-&gt;draw( &quot;my_template&quot; ); // draw the template  So this snippet will draw for example  &quot;Hello my name is Rain&quot;   source = [FAQ/ ]" class="comment-body">here a simple example of how a template engine works:</span><br/><br/>my_template.html</p>
             <div class="template">My name is <span class="variable">{$name}</span></div>
             <p><span data-li-comment-text="Sure Manick,  a template engine is a script that loads templates and draws the graphics of your application. The purpose of the template engine is to separate the logic from the presentation, so developers and designers can work better together, because developers can focus on the PHP and designers can work on the HTML.  When we talk about PHP, usually it's a library that loads HTML template, and here a simple example of how they works:  my_template.html&lt;br&gt;&lt;br&gt; &lt;div class=" class="comment-body"><br/>my_script.php </span></p>
             <div class="php">$t=new raintpl;  <br/>$t-&gt;assign("name", // get the name from a database for example //  ); <br/>$t-&gt;draw( "my_template" ); // draw the template</div>
@@ -50,9 +50,9 @@
             <h2>What is the faster PHP template engine?</h2>
             <p>RainTPL is a fast and light template engine, if performance are important for you try RainTPL.</p>
             <h2>Why Rain?</h2>
-            <p>Rain is a PHP template engine, easy, fast and secure. It is open source under GNU/LGPL, so you are free to use it in  your free or commercial projects.<br/><br/>It totally separates logic from presentation, so developers focus on PHP and designers on HTML.<br/><br/>Is the only template engine that uses relative paths. This feature called <a href="http://www.raintpl.com/Documentation/Documentation-for-web-designers/WYSIWYG/">WYSIWYG</a> allows designers to work on templates, like static page, so it's possible to immediately check the result on the browser. Cool ah?<br/><br/></p>
+            <p>Rain is a PHP template engine, easy, fast and secure. It is open source under GNU/LGPL, so you are free to use it in  your free or commercial projects.<br/><br/>It totally separates logic from presentation, so developers focus on PHP and designers on HTML.<br/><br/>Is the only template engine that uses relative paths. This feature called <a href="Documentation/Documentation-for-web-designers/WYSIWYG/">WYSIWYG</a> allows designers to work on templates, like static page, so it's possible to immediately check the result on the browser. Cool ah?<br/><br/></p>
             <h2>Why should I use a template engine in an MVC Framework?</h2>
-            <p>Templates keep your presentation layer clean and elegant, which enable your application to be more maintainable than using PHP Views.<br/> <br/>Also thanks to the sandbox, you can't run dangerous code in your templates, and you can have sweet dream!<br/><br/>Here a  tutorial of how to integrate <a href="http://www.raintpl.com/News/2011/02/17/Integrating-Rain-TPL-into-Zend/">RainTPL in Zend Framework</a>.<br/><a href="http://www.rainframework.com">Rain Framework</a>, uses by default Rain TPL for the presentation layer.&nbsp;</p>
+            <p>Templates keep your presentation layer clean and elegant, which enable your application to be more maintainable than using PHP Views.<br/> <br/>Also thanks to the sandbox, you can't run dangerous code in your templates, and you can have sweet dream!<br/><br/>Here a  tutorial of how to integrate <a href="News/2011/02/17/Integrating-Rain-TPL-into-Zend/">RainTPL in Zend Framework</a>.<br/><a href="http://www.rainframework.com">Rain Framework</a>, uses by default Rain TPL for the presentation layer.&nbsp;</p>
             <ol> </ol></div>
     </div>
 </div>
@@ -60,16 +60,16 @@
 
 <div id="footer">
     <div class="left">
-        <a href="http://www.raintpl.com/">Home</a>
-        <a href="http://www.raintpl.com/Download.html">Download</a>
-        <a href="http://www.raintpl.com/Documentation.html">Documentation</a>
-        <a href="http://www.raintpl.com/Forum.html">Forum</a>
-        <a href="http://www.raintpl.com/Credits.html" class="selected">Credits</a>
+        <a href="/">Home</a>
+        <a href="Download.html">Download</a>
+        <a href="Documentation.html">Documentation</a>
+        <a href="Forum.html">Forum</a>
+        <a href="Credits.html" class="selected">Credits</a>
 
         <br><br>
-        <a href="http://www.raintpl.com/FAQ.html" class="selected">FAQ</a>
-        <a href="http://www.raintpl.com/News.html">News</a>
-        <a href="http://www.raintpl.com/Links.html">Links</a>
+        <a href="FAQ.html" class="selected">FAQ</a>
+        <a href="News.html">News</a>
+        <a href="Links.html">Links</a>
     </div>
     <div class="right">Copyright RainTPL</div>
 </div>
