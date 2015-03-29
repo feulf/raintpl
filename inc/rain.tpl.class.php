@@ -102,6 +102,13 @@ class RainTPL{
 		 */
 		static $debug = false;
 
+        /**
+         * Path for the root directory
+         *
+         * @var string
+         */
+        static $root_dir = '';
+
 	// -------------------------
 
 
@@ -260,8 +267,8 @@ class RainTPL{
 			$tpl_basename                       = basename( $tpl_name );														// template basename
 			$tpl_basedir                        = strpos($tpl_name,"/") ? dirname($tpl_name) . '/' : null;						// template basedirectory
 			$this->tpl['template_directory']    = self::$tpl_dir . $tpl_basedir;								// template directory
-			$this->tpl['tpl_filename']          = $this->tpl['template_directory'] . $tpl_basename . '.' . self::$tpl_ext;	// template filename
-			$temp_compiled_filename             = self::$cache_dir . $tpl_basename . "." . md5( $this->tpl['template_directory'] . serialize(self::$config_name_sum));
+			$this->tpl['tpl_filename']          = self::$root_dir . $this->tpl['template_directory'] . $tpl_basename . '.' . self::$tpl_ext;    // template filename
+			$temp_compiled_filename             = self::$root_dir . self::$cache_dir . $tpl_basename . "." . md5( $this->tpl['template_directory'] . serialize(self::$config_name_sum));
 			$this->tpl['compiled_filename']     = $temp_compiled_filename . '.rtpl.php';	// cache filename
 			$this->tpl['cache_filename']        = $temp_compiled_filename . '.s_' . $this->cache_id . '.rtpl.php';	// static cache filename
                         $this->tpl['checked']               = true;
