@@ -281,12 +281,12 @@ class RainTPL{
 
 			// We check if the template is not an external source
 			if(preg_match('/http/', $tpl_name)){
-			$this->compileFile('', '', $tpl_name, self::$root_dir . self::$cache_dir, $this->tpl['compiled_filename'] );
+				$this->compileFile('', '', $tpl_name, self::$root_dir . self::$cache_dir, $this->tpl['compiled_filename'] );
 				return true;
 			}
 			// file doesn't exist, or the template was updated, Rain will compile the template
 			elseif( !file_exists( $this->tpl['compiled_filename'] ) || ( self::$check_template_update && filemtime($this->tpl['compiled_filename']) < filemtime( $this->tpl['tpl_filename'] ) ) ){
-			$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], self::$root_dir . self::$cache_dir, $this->tpl['compiled_filename'] );
+				$this->compileFile( $tpl_basename, $tpl_basedir, $this->tpl['tpl_filename'], self::$root_dir . self::$cache_dir, $this->tpl['compiled_filename'] );
 				return true;
 			}
 			
