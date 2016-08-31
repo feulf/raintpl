@@ -738,7 +738,7 @@ class RainTPL{
 			$tags = array_intersect( array( "form" ), self::$path_replace_list );
 			$exp[] = '/<(' . join( '|', $tags ) . ')(.*?)(action)="(' . $url . ')"/i';
 
-			return preg_replace_callback( $exp, 'self::single_path_replace', $html );
+			return preg_replace_callback( $exp, array($this, 'single_path_replace'), $html );
 
 		}
 		else
