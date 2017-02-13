@@ -838,6 +838,10 @@ class RainTPL{
 
 			// compile the variable for php
 			if( isset( $function ) ){
+				// FIX Issue#30: checking for plain strings
+				if (preg_match("/^(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))$/is", $var))
+					$php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . ( $params ? "( $function( $var, $params ) )" : "$function( $var )" ) . $php_right_delimiter;
+				elseif( $php_var )
 				if( $php_var )
 					$php_var = $php_left_delimiter . ( !$is_init_variable && $echo ? 'echo ' : null ) . ( $params ? "( $function( $php_var, $params ) )" : "$function( $php_var )" ) . $php_right_delimiter;
 				else
